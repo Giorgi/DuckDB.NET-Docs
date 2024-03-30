@@ -1,0 +1,46 @@
+{
+  "metadata": [
+    {
+      "src": [
+        {
+          "src": "../DuckDB.NET",
+          "files": [
+            "**/Bindings.csproj",
+            "**/Data.csproj"
+          ]
+        }
+      ],
+      "dest": "api"
+    }
+  ],
+  "build": {
+    "content": [
+      {
+        "files": [
+          "**/*.{md,yml}"
+        ],
+        "exclude": [
+          "_site/**"
+        ]
+      }
+    ],
+    "resource": [
+      {
+        "files": [
+          "images/**"
+        ]
+      }
+    ],
+    "output": "_site",
+    "template": [
+      "default",
+      "modern"
+    ],
+    "globalMetadata": {
+      "_appName": "DuckDB.NET - Bindings and ADO.NET Provider for DuckDB",
+      "_appTitle": "DuckDB.NET - Bindings and ADO.NET Provider for DuckDB",
+      "_enableSearch": true,
+      "pdf": false
+    }
+  }
+}
