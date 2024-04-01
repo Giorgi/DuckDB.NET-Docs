@@ -1,11 +1,11 @@
 ---
 _layout: landing
+redirect_url: docs/introduction.html
 ---
 
-# This is the **HOMEPAGE**.
+# DuckDB.NET - Bindings and ADO.NET Provider for DuckDB.
 
-Refer to [Markdown](http://daringfireball.net/projects/markdown/) for how to write markdown files.
+## About
 
-## Quick Start Notes:
-
-1. Add images to the *images* folder if the file is referencing an image.
+[DuckDB.NET](https://github.com/Giorgi/DuckDB.NET) is an open-source ADO.NET provider for DuckDB, a fast, in-process analytical database. It also includes a low-level, .NET 
+wrapper around the [DuckDB C API](https://duckdb.org/docs/api/c/overview).

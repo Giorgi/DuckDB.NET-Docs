@@ -37,8 +37,8 @@
       "modern"
     ],
     "globalMetadata": {
-      "_appName": "DuckDB.NET - Bindings and ADO.NET Provider for DuckDB",
-      "_appTitle": "DuckDB.NET - Bindings and ADO.NET Provider for DuckDB",
+      "_appName": "DuckDB.NET",
+      "_appTitle": "DuckDB.NET",
       "_enableSearch": true,
       "pdf": false
     }
