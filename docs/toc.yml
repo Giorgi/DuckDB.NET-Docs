@@ -4,3 +4,5 @@
   href: getting-started.md
 - name: Connection String Parameters
   href: connection-string.md
+- name: Bulk Data Loading
+  href: bulk-data-loading.md
