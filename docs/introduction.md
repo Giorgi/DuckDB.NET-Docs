@@ -8,10 +8,10 @@
 
 To ask questions about DuckDB.NET join the [DuckDB Discord](https://discord.duckdb.org/) and post your question in the **dotnet** channel.
 
-If you think you have found an issue, [open an issue](https://discord.duckdb.org/) in the GitHub repository and include a [Minimal, Reproducible Example](https://stackoverflow.com/help/minimal-reproducible-example).
+If you think you have found an issue, [open an issue](https://github.com/Giorgi/DuckDB.NET/issues/new) in the GitHub repository and include a [Minimal, Reproducible Example](https://stackoverflow.com/help/minimal-reproducible-example).
 
 ## Sponsors
 
-A big thanks to [AWS Open Source Software Fund](https://github.com/aws/dotnet-foss) for sponsoring the project!
+A big thanks to the [AWS Open Source Software Fund](https://github.com/aws/dotnet-foss) for sponsoring the project!
 
-[![AWS](https://github.com/Giorgi/DuckDB.NET/raw/develop/.github/sponsors/aws-logo-small.png)](https://github.com/aws/dotnet-foss)
+[![AWS](/images/aws-logo-small.png)](https://github.com/aws/dotnet-foss)

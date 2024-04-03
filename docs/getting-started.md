@@ -1,6 +1,6 @@
 # Getting Started
 
-## ADO.NET Provider and Low Level Library
+## ADO.NET Provider and Low-Level Library
 
 There are two ways to work with DuckDB from C#: You can use ADO.NET Provider or use a low-level bindings library for DuckDB. The ADO.NET Provider is built on top of the low-level library and is the recommended and most straightforward approach to work with DuckDB.
 
