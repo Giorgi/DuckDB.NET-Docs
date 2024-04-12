@@ -8,3 +8,6 @@
   href: basic-usage.md
 - name: Bulk Data Loading
   href: bulk-data-loading.md
+- name: Composite Types and Enums
+  href: composite-types.md
+  
