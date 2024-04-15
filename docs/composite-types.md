@@ -4,7 +4,7 @@ DuckDB.NET supports reading all composite types such as `Array`, `Struct`, `List
 
 ## Reading Enum and Composite types
 
-You can read an Enum or composite type by calling the [GetValue](xref:DuckDB.NET.Data.DuckDBDataReader.GetValue(System.Int32)) or the [GetFieldValue`<T>`](xref:DuckDB.NET.Data.DuckDBDataReader.GetFieldValue``1(System.Int32)) method.
+You can read an Enum or composite type by calling the [`GetValue`](xref:DuckDB.NET.Data.DuckDBDataReader.GetValue(System.Int32)) or the [`GetFieldValue<T>`](xref:DuckDB.NET.Data.DuckDBDataReader.GetFieldValue``1(System.Int32)) method.
 
 The following table lists the mapping that determines what type will be returned when using the `GetValue` method to read enum and composite types:
 
@@ -32,6 +32,6 @@ Reading arbitrary nested composite types is fully supported by DuckDB.NET. DuckD
 
 ## Nested types and nullability
 
-When reading a List/Array of non-nullable types (int, short, long, bool, etc) an exception will be thrown if the List contains `null` and you are trying to read it as `List<int>` (or other non-nullable type). To read a List with nullable values pass the corresponding nullable type to the `GetFieldValue<T>` method.  For example, to read a list of nullable ints use `DuckDBDataReader.GetFieldValue<List<int>>`.
+When reading a List/Array of non-nullable types (int, short, long, bool, etc) an exception will be thrown if the List contains `null` and you are trying to read it as `List<int>` (or other non-nullable type). To read a List with nullable values pass the corresponding nullable type to the `GetFieldValue<T>` method.  For example, to read a list of nullable ints use `DuckDBDataReader.GetFieldValue<List<int?>>`.
 
 When reading a Struct, an exception will be thrown if the struct entry contains a null value and the corresponding property is non-nullable.
