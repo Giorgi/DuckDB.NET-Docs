@@ -59,3 +59,9 @@ do
   //consume data from the reader
 } while (reader.NextResult());
 ```
+
+## Materialized and Streaming mode
+
+When executing a Select statement with a `DuckDBCommand`, DuckDB.NET will by default use materialized execution mode. In this mode, DuckDB will fetch the whole
+result set in memory which might result in high memory usage. An alternative is to use streaming execution mode, in which case DuckDB will fetch the result
+set chunk by chunk and use a lower amount of memory but this may result in slower query execution. To use streaming mode set the [`UseStreamingMode`](xref:DuckDB.NET.Data.DuckDBCommand.UseStreamingMode) property to true.
