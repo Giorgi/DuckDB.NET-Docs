@@ -12,4 +12,6 @@
   href: type-mapping.md
 - name: Composite Types and Enums
   href: composite-types.md
+- name: User-Defined Functions (UDFs)
+  href: udf.md
   

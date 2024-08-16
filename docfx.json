@@ -11,8 +11,8 @@
         }
       ],
       "dest": "api",
-	  "properties": {
-          "TargetFramework": "net6.0"
+      "properties": {
+        "TargetFramework": "net8.0"
       }
     }
   ],
@@ -38,7 +38,7 @@
     "template": [
       "default",
       "modern",
-	  "my-template"
+      "my-template"
     ],
     "globalMetadata": {
       "_appName": "DuckDB.NET",
