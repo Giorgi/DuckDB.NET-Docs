@@ -15,11 +15,14 @@ jobs:
     steps:
     - name: Check out docs
       uses: actions/checkout@v4
+      with:
+        path: docs
     
     - name: Check out DuckDB.NET
       uses: actions/checkout@v4
       with:
         repository: Giorgi/DuckDB.NET
+        path: docs/DuckDB.NET
 
     - name: Display structure of files
       run: ls -R     
