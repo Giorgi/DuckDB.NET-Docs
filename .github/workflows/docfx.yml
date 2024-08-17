@@ -30,6 +30,9 @@ jobs:
       with:
         global-json-file: src/DuckDB.NET/global.json
         
+    - name: Build
+      run: dotnet build src/DuckDB.NET/DuckDB.NET.sln --configuration Release
+    
     - uses: nunit/docfx-action@v3.4.1
       name: Build Documentation
       with:
