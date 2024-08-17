@@ -30,7 +30,7 @@ jobs:
       with:
         args: src/DuckDB.NET-Docs/docfx.json
         
-    - name: Deploy to Netlify (PR only)
+    - name: Deploy to Netlify
       uses: South-Paw/action-netlify-cli@v2
       id: netlify
       with:
@@ -38,5 +38,5 @@ jobs:
         args: deploy --json --dir './src/DuckDB.NET-Docs/_site' --message 'Auto deploy [${{ github.sha }}]'
       env:
         NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-        NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}     
+        NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
     
