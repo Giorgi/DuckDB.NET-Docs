@@ -24,6 +24,11 @@ jobs:
         repository: Giorgi/DuckDB.NET
         path: src/DuckDB.NET
 
+    - uses: nunit/docfx-action@v2.4.0
+      name: Build Documentation
+      with:
+        args: src/DuckDB.NET-Docs/docfx.json
+        
     - name: Display structure of files
       run: ls -R     
     
