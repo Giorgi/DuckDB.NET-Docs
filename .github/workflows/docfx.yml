@@ -16,13 +16,13 @@ jobs:
     - name: Check out docs
       uses: actions/checkout@v4
       with:
-        path: docs
+        path: src/DuckDB.NET-Docs
     
     - name: Check out DuckDB.NET
       uses: actions/checkout@v4
       with:
         repository: Giorgi/DuckDB.NET
-        path: docs/DuckDB.NET
+        path: src/DuckDB.NET
 
     - name: Display structure of files
       run: ls -R     
