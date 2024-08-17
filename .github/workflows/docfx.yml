@@ -30,7 +30,7 @@ jobs:
       with:
         global-json-file: src/DuckDB.NET/global.json
         
-    - uses: nunit/docfx-action@v2.4.0
+    - uses: nunit/docfx-action@v3.4.1
       name: Build Documentation
       with:
         args: src/DuckDB.NET-Docs/docfx.json
