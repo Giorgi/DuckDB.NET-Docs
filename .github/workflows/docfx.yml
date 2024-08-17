@@ -24,6 +24,11 @@ jobs:
         repository: Giorgi/DuckDB.NET
         ref: nightly-scalar-function
         path: src/DuckDB.NET
+    
+    - name: Setup .NET Core SDK
+      uses: actions/setup-dotnet@v4
+      with:
+        global-json-file: src/DuckDB.NET/global.json
         
     - uses: nunit/docfx-action@v3.4.1
       name: Build Documentation
