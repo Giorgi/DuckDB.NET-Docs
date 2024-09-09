@@ -22,7 +22,6 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: Giorgi/DuckDB.NET
-        ref: nightly-scalar-function
         path: src/DuckDB.NET
         fetch-depth: 0
     
