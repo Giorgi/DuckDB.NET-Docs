@@ -84,7 +84,7 @@ connection.RegisterScalarFunction<long, long>("my_rand", (readers, writer, rowCo
 }, false, true);
 ```
 
-In this example `my_rand` will return a random number if no parameter is passed to it, or return a random number less than the specified value or return a random number between two specified values.
+In this example `my_rand` will return a random number if no parameter is passed to it, or return a random number less than the specified value, or return a random number between the two specified values.
 
 ```sql
 SELECT my_rand() FROM some_table;
