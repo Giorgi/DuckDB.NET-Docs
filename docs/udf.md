@@ -1,11 +1,11 @@
 # User-Defined Functions in DuckDB.NET
 
 DuckDB supports creating user-defined functions for expending the functionality of DuckDB. Starting from DuckDB.NET 1.1,
-you can create scalar UDFs with C#.
+you can create scalar UDFs with C#. Table valued functions are supported from DuckDB.NET 1.1.3
 
 ## Scalar User-Defined Functions
 
-To register scalar UDFs, call one of the [RegisterScalarFunction](xref:DuckDB.NET.Data.DuckDBConnection.RegisterScalarFunction``1(System.String,System.Action{DuckDB.NET.Data.Reader.IDuckDBDataReader[],DuckDB.NET.Data.Writer.IDuckDBDataWriter,System.UInt64},System.Boolean)) overloads specifying the function name, input parameter type(s), return type, and the actual callback for the scalar function:
+To register scalar UDFs, call one of the [RegisterScalarFunction](xref:DuckDB.NET.Data.DuckDBConnection.RegisterScalarFunction*) overloads specifying the function name, input parameter type(s), return type, and the actual callback for the scalar function:
 
 ```cs
 connection.RegisterScalarFunction<int, bool>("is_prime", (readers, writer, rowCount) =>
@@ -64,17 +64,17 @@ connection.RegisterScalarFunction<long, long>("my_rand", (readers, writer, rowCo
     {
         var value = 0L;
 
-        if (readers.Length == 0)
+        if (readers.Count == 0)
         {
             value = Random.Shared.NextInt64();
         }
 
-        if (readers.Length == 1)
+        if (readers.Count == 1)
         {
             value = Random.Shared.NextInt64(readers[0].GetValue<long>(index));
         }
 
-        if (readers.Length == 2)
+        if (readers.Count == 2)
         {
             value = Random.Shared.NextInt64(readers[0].GetValue<long>(index), readers[1].GetValue<long>(index));
         }

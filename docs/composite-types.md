@@ -1,6 +1,7 @@
 # Working with composite types
 
-DuckDB.NET supports reading all composite types such as `Array`, `Struct`, `List`, and `Map` except the `Union` composite type. The `Enum` type is supported as well. Writing composite types is not yet supported.
+DuckDB.NET supports reading all composite types such as `Array`, `Struct`, `List`, and `Map` except the `Union` composite type. The `Enum` type is supported as well. Writing composite types is partially supported. You can use [Parameterized statements](basic-usage.md#parameterized-statements) to write `LIST` or `ARRAY` types. Additionally, you can use [`DuckDBAppender`](xref:DuckDB.NET.Data.DuckDBAppender) to append to an `Enum`, `LIST` or `ARRAY` column.
+
 
 ## Reading Enum and Composite types
 

@@ -2,7 +2,7 @@
 
 ## About
 
-[DuckDB.NET](https://github.com/Giorgi/DuckDB.NET) is an open-source ADO.NET provider for DuckDB, a fast, in-process analytical database. It also includes a low-level, .NET wrapper around the [DuckDB C API](https://duckdb.org/docs/api/c/overview).
+[DuckDB.NET](https://github.com/Giorgi/DuckDB.NET) is an open-source ADO.NET provider for [DuckDB](https://duckdb.org/), a fast, in-process analytical database. It also includes a low-level, .NET wrapper around the [DuckDB C API](https://duckdb.org/docs/api/c/overview).
 
 ## Getting Help and Reporting Issues
 
