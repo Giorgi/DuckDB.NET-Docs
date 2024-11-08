@@ -1,9 +1,4 @@
-# User-Defined Functions in DuckDB.NET
-
-DuckDB supports creating user-defined functions for expending the functionality of DuckDB. Starting from DuckDB.NET 1.1,
-you can create scalar UDFs with C#. Table valued functions are supported from DuckDB.NET 1.1.3
-
-## Scalar User-Defined Functions
+# Scalar User-Defined Functions
 
 To register scalar UDFs, call one of the [RegisterScalarFunction](xref:DuckDB.NET.Data.DuckDBConnection.RegisterScalarFunction*) overloads specifying the function name, input parameter type(s), return type, and the actual callback for the scalar function:
 
@@ -35,7 +30,7 @@ var primes = connection.Query<int>("SELECT i FROM range(2, 100) t(i) where is_pr
 
 In the example above, `RegisterScalarFunction` has two type parameters: `int` indicates the input parameter type and `bool` indicates the return type of the function. The `readers` parameter passed to the callback is an array of type [`IDuckDBDataReader`](xref:DuckDB.NET.Data.Reader.IDuckDBDataReader) and will have a length that matches the number of input parameters. The `writer` parameter of type [`IDuckDBDataWriter`](xref:DuckDB.NET.Data.Writer.IDuckDBDataWriter) is used for writing to the output.
 
-### Pure Scalar Functions
+## Pure Scalar Functions
 
 By default scalar UDFs are treated as [pure functions](https://en.wikipedia.org/wiki/Pure_function), meaning that the scalar function will return the same result when the input is the same. For example, if your table has repeated values, the `is_prime` will be called only once for every unique value. If your function doesn't follow this rule, you need to pass `false` to `isPureFunction` parameter:
 
@@ -53,7 +48,7 @@ connection.RegisterScalarFunction<long, long>("my_random_scalar", (readers, writ
 connection.Query<long>("SELECT my_random_scalar(i) FROM some_table");
 ```
 
-### Variable Number of Arguments
+## Variable Number of Arguments
 
 Similar to the `params` keyword in C#, DuckDB scalar functions can also accept variable number of arguments. To register such function pass `true` to `params` parameter:
 
@@ -94,7 +89,7 @@ SELECT my_rand(upper_bound) FROM some_table;
 SELECT my_rand(lower_bound, upper_bound) FROM some_table;
 ```
 
-### Supporting Different Input Types
+## Supporting Different Input Types
 
 If your scalar function supports different input types, you can use `object` as input type. The following scalar function `to_string` formats the input according to the specified format and returns it to DuckDB:
 

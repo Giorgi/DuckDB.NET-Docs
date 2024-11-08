@@ -13,5 +13,11 @@
 - name: Composite Types and Enums
   href: composite-types.md
 - name: User-Defined Functions (UDFs)
-  href: udf.md
+  items:
+    - name: Overview
+      href: user-defined-functions.md
+    - name: Scalar Functions
+      href: scalar-functions.md
+    - name: Table Functions
+      href: table-functions.md
   
