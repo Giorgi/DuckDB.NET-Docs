@@ -12,7 +12,7 @@ command.CommandText = "Select count(*) from integers";
 var count = command.ExecuteScalar();
 
 command.CommandText = "SELECT foo, bar FROM integers";
-var reader = command.ExecuteReader();
+var queryResult = command.ExecuteReader();
 
 for (var index = 0; index < queryResult.FieldCount; index++)
 {
@@ -22,9 +22,9 @@ for (var index = 0; index < queryResult.FieldCount; index++)
 
 Console.WriteLine();
 
-while (reader.Read())
+while (queryResult.Read())
 {
-    for (int ordinal = 0; ordinal < reader.FieldCount; ordinal++)
+    for (int ordinal = 0; ordinal < queryResult.FieldCount; ordinal++)
     {
         if (queryResult.IsDBNull(ordinal))
         {
@@ -32,7 +32,7 @@ while (reader.Read())
             continue;
         }
 
-        var val = queryResult.GetValue<int>(ordinal);
+        var val = queryResult.GetValue(ordinal);
         Console.Write(val);
         Console.Write(" ");
     }
