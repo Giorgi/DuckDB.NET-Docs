@@ -12,27 +12,27 @@ command.CommandText = "Select count(*) from integers";
 var count = command.ExecuteScalar();
 
 command.CommandText = "SELECT foo, bar FROM integers";
-var queryResult = command.ExecuteReader();
+var reader = command.ExecuteReader();
 
-for (var index = 0; index < queryResult.FieldCount; index++)
+for (var index = 0; index < reader.FieldCount; index++)
 {
-    var column = queryResult.GetName(index);
+    var column = reader.GetName(index);
     Console.Write($"{column} ");
 }
 
 Console.WriteLine();
 
-while (queryResult.Read())
+while (reader.Read())
 {
-    for (int ordinal = 0; ordinal < queryResult.FieldCount; ordinal++)
+    for (int ordinal = 0; ordinal < reader.FieldCount; ordinal++)
     {
-        if (queryResult.IsDBNull(ordinal))
+        if (reader.IsDBNull(ordinal))
         {
             Console.WriteLine("NULL");
             continue;
         }
 
-        var val = queryResult.GetValue(ordinal);
+        var val = reader.GetFieldValue<int>(ordinal);
         Console.Write(val);
         Console.Write(" ");
     }
