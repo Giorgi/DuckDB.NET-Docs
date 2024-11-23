@@ -14,9 +14,9 @@ var count = command.ExecuteScalar();
 command.CommandText = "SELECT foo, bar FROM integers";
 var reader = command.ExecuteReader();
 
-for (var index = 0; index < queryResult.FieldCount; index++)
+for (var index = 0; index < reader.FieldCount; index++)
 {
-    var column = queryResult.GetName(index);
+    var column = reader.GetName(index);
     Console.Write($"{column} ");
 }
 
@@ -26,13 +26,13 @@ while (reader.Read())
 {
     for (int ordinal = 0; ordinal < reader.FieldCount; ordinal++)
     {
-        if (queryResult.IsDBNull(ordinal))
+        if (reader.IsDBNull(ordinal))
         {
             Console.WriteLine("NULL");
             continue;
         }
 
-        var val = queryResult.GetValue<int>(ordinal);
+        var val = reader.GetFieldValue<int>(ordinal);
         Console.Write(val);
         Console.Write(" ");
     }
