@@ -12,7 +12,7 @@ command.CommandText = "Select count(*) from integers";
 var count = command.ExecuteScalar();
 
 command.CommandText = "SELECT foo, bar FROM integers";
-var reader = command.ExecuteReader();
+using var reader = command.ExecuteReader();
 
 for (var index = 0; index < reader.FieldCount; index++)
 {
