@@ -10,7 +10,8 @@
             "type": "shell",
             "args": [
                 "docfx.json",
-                "--serve"
+                "--serve",
+                "--verbose"
             ],
             "group": {
                 "kind": "build",
