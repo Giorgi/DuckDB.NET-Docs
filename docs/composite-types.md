@@ -1,6 +1,6 @@
 # Working with composite types
 
-DuckDB.NET supports reading all composite types such as `Array`, `Struct`, `List`, and `Map` except the `Union` composite type. The `Enum` type is supported as well. Writing composite types is partially supported. You can use [Parameterized statements](basic-usage.md#parameterized-statements) to write `LIST` or `ARRAY` types. Additionally, you can use [`DuckDBAppender`](xref:DuckDB.NET.Data.DuckDBAppender) to append to an `Enum`, `LIST` or `ARRAY` column.
+DuckDB.NET supports reading all composite types such as `Array`, `Struct`, `List`, and `Map` except the `Union` composite type. The `Enum` type is supported as well. Writing composite types is partially supported. You can use [Parameterized statements](basic-usage.md#parameterized-statements) to write `LIST` or `ARRAY` types. Additionally, you can use [`DuckDBAppender`](xref:DuckDB.NET.Data.DuckDBAppender) to append to an `Enum`, `LIST` or `ARRAY` column, including nested types. Starting from version 1.2.0,  DuckDB.NET supports writing nested composite types with prepared statements. You can insert/update  Lists of Lists, Lists of Lists of Lists, Arrays of Arrays, Lists of Arrays, Arrays of Lists, or any combination of these types of arbitrary depth.
 
 
 ## Reading Enum and Composite types
