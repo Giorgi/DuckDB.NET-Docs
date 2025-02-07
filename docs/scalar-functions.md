@@ -28,7 +28,7 @@ var primes = connection.Query<int>("SELECT i FROM range(2, 100) t(i) where is_pr
 //primes will be 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97
 ```
 
-In the example above, `RegisterScalarFunction` has two type parameters: `int` indicates the input parameter type and `bool` indicates the return type of the function. The `readers` parameter passed to the callback is an array of type [`IDuckDBDataReader`](xref:DuckDB.NET.Data.Reader.IDuckDBDataReader) and will have a length that matches the number of input parameters. The `writer` parameter of type [`IDuckDBDataWriter`](xref:DuckDB.NET.Data.Writer.IDuckDBDataWriter) is used for writing to the output.
+In the example above, `RegisterScalarFunction` has two type parameters: `int` indicates the input parameter type and `bool` indicates the return type of the function. The `readers` parameter passed to the callback is an array of type [`IDuckDBDataReader`](xref:DuckDB.NET.Data.DataChunk.Reader.IDuckDBDataReader) and will have a length that matches the number of input parameters. The `writer` parameter of type [`IDuckDBDataWriter`](xref:DuckDB.NET.Data.DataChunk.Writer.IDuckDBDataWriter) is used for writing to the output.
 
 ## Pure Scalar Functions
 
