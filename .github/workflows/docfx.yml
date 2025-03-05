@@ -31,7 +31,7 @@ jobs:
         global-json-file: src/DuckDB.NET/global.json
         
     - name: Build
-      run: dotnet build src/DuckDB.NET/DuckDB.NET.sln --configuration Release
+      run: dotnet build src/DuckDB.NET/DuckDB.NET.slnx --configuration Release
     
     - name: Get docfx
       run: dotnet tool install --version 2.78.2 -g docfx
