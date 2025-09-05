@@ -10,6 +10,14 @@ DuckDB.NET connection strings follow the standard [ADO.NET](https://learn.micros
 
 For an in-memory database use `Data Source=:memory:` connection string. When using an in-memory database no data is persisted on disk. Every in-memory connection results in a new, isolated database so tables created inside one in-memory connection aren't visible to another in-memory connection. If you want to create a shared in-memory database, you can use the `Data Source=:memory:?cache=shared` connection string. Both connection strings are exposed by the library as `DuckDBConnectionStringBuilder.InMemoryDataSource` and `DuckDBConnectionStringBuilder.InMemorySharedDataSource` respectively.
 
+## MotherDuck 
+
+To connect to [MotherDuck](https://motherduck.com):
+
+```cs
+using var duckDBConnection = new DuckDBConnection("DataSource=md:{your_database}?motherduck_token=ey...");
+```
+
 ## DuckDB configuration
 
 DuckDB has several [configuration options](https://duckdb.org/docs/sql/configuration#configuration-reference) that can be used to change the behavior of the system. These options can be included in the connection string and they will be automatically set when a connection is opened.
