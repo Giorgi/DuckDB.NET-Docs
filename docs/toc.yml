@@ -8,6 +8,8 @@
   href: basic-usage.md
 - name: Bulk Data Loading
   href: bulk-data-loading.md
+- name: Mapped Appender
+  href: mapped-appender.md
 - name: Type Mappings
   href: type-mapping.md
 - name: Composite Types and Enums
