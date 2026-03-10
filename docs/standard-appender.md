@@ -10,6 +10,17 @@ Use this approach for maximum performance when type safety is not needed, or whe
 ## Example
 [!code-csharp[](../code/ManagedAppender.cs)]
 
+## Discarding In-Progress Rows
+
+Call `Clear()` to discard any buffered rows without closing the appender. This lets you roll back a batch and continue appending:
+
+```csharp
+appender.CreateRow().AppendValue(1).AppendValue(10).EndRow();
+appender.Clear(); // Discards the row above
+appender.CreateRow().AppendValue(2).AppendValue(20).EndRow();
+appender.Close(); // Only (2, 20) is inserted
+```
+
 ## Data Importing from Files
 
 For importing data from CSV, Parquet, JSON and other file types see the DuckDB documentation for [Data Importing](https://duckdb.org/docs/data/overview).
