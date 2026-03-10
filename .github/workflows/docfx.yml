@@ -34,7 +34,7 @@ jobs:
       run: dotnet build src/DuckDB.NET/DuckDB.NET.slnx --configuration Release
     
     - name: Get docfx
-      run: dotnet tool install --version 2.78.2 -g docfx
+      run: dotnet tool install --version 2.78.5 -g docfx
 
     - name: Build docs
       run: docfx --warningsAsErrors src/DuckDB.NET-Docs/docfx.json
