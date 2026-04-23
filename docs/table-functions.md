@@ -96,6 +96,64 @@ SELECT * FROM employees(10, max_rows = 2);
 
 Named parameters should typically be nullable types (`string?`, `int?`) since they're optional in SQL. If a named parameter is non-nullable and the caller omits it, DuckDB.NET throws a clear error.
 
+### Projection Pushdown
+
+When DuckDB executes a query like `SELECT name FROM my_func()`, it only needs the `name` column. With projection pushdown, your data function receives the list of requested columns so it can skip fetching unnecessary data — useful when reading from remote APIs, databases, or other expensive sources.
+
+Add `IReadOnlyList<ProjectedColumn>` as the **first** parameter of your data function:
+
+```cs
+connection.RegisterTableFunction("employees",
+    (IReadOnlyList<ProjectedColumn> projected, int count) =>
+    {
+        // projected contains only the columns DuckDB actually needs
+        return FetchEmployees(count, projected.Select(p => p.Name));
+    },
+    e => new { e.Id, e.Name, e.Salary });
+```
+
+```sql
+-- projected will contain: [{ Index: 1, Name: "Name", Type: typeof(string) }]
+SELECT name FROM employees(3);
+
+-- projected will contain: [{ Index: 0, ... }, { Index: 2, ... }]
+SELECT id, salary FROM employees(3);
+
+-- projected will contain all three columns
+SELECT * FROM employees(3);
+```
+
+Each `ProjectedColumn` has three properties:
+
+| Property | Type     | Description                                    |
+|----------|----------|------------------------------------------------|
+| `Index`  | `int`    | Zero-based index in the original column list   |
+| `Name`   | `string` | Column name from the `ColumnInfo` definition   |
+| `Type`   | `Type`   | .NET type from the `ColumnInfo` definition     |
+
+The projection parameter:
+
+- Must be the **first** parameter — placing it elsewhere throws `InvalidOperationException`
+- Cannot have the `[Named]` attribute
+- Is not exposed as a SQL parameter — it's injected automatically by DuckDB.NET
+- Works with zero to three additional SQL parameters (positional and/or named)
+
+```cs
+// Zero SQL parameters — projection only
+connection.RegisterTableFunction("all_employees",
+    (IReadOnlyList<ProjectedColumn> projected) => FetchAll(projected),
+    e => new { e.Id, e.Name });
+
+// Mixed with named parameters
+connection.RegisterTableFunction("employees",
+    (IReadOnlyList<ProjectedColumn> projected, int count, [Named] string? prefix) =>
+        FetchEmployees(count, prefix, projected),
+    e => new { e.Id, e.Name, e.Salary });
+```
+
+> [!NOTE]
+> Without projection pushdown, data is fetched eagerly at bind time. With projection pushdown, data fetching is deferred to init time - after DuckDB determines which columns are needed.
+
 ### Async Data Sources
 
 Async data sources work with `ToBlockingEnumerable()`:
