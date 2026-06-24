@@ -6,6 +6,8 @@
   href: connection-string.md
 - name: Basic Usage
   href: basic-usage.md
+- name: Apache Arrow
+  href: arrow.md
 - name: Bulk Data Loading
   items:
     - name: Overview
