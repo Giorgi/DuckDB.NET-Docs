@@ -12,9 +12,9 @@ If you think you have found an issue, [open an issue](https://github.com/Giorgi/
 
 ## Sponsors
 
-A big thanks to [DuckDB Labs](https://duckdblabs.com/) and [AWS Open Source Software Fund](https://github.com/aws/dotnet-foss) for sponsoring the project!
+A big thanks to [DuckLabs](https://ducklabs.com/) and [AWS Open Source Software Fund](https://github.com/aws/dotnet-foss) for sponsoring the project!
 
-[![DuckDB Labs](/images/duckdb-labs-logo.png)](https://duckdblabs.com/)
+[![DuckLabs](/images/ducklabs-logo.png)](https://ducklabs.com/)
 
 
 [![AWS](/images/aws-logo-small.png)](https://github.com/aws/dotnet-foss)
