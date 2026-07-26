@@ -1,10 +1,10 @@
 # Mapped Appender
 
-The Mapped Appender provides a type-safe way to bulk load data from .NET objects into DuckDB tables. It uses `DuckDBAppenderMap` to define mappings between your object properties and table columns, with automatic type validation.
+The Mapped Appender provides a type-safe way to bulk load data from .NET objects into DuckDB tables. It uses [`DuckDBAppenderMap`](xref:DuckDB.NET.Data.Mapping.DuckDBAppenderMap`1) to define mappings between your object properties and table columns, with automatic type validation.
 
 ## Overview
 
-While the standard [DuckDBAppender](xref:DuckDB.NET.Data.DuckDBAppender) provides efficient bulk loading, it requires manual column ordering and type management. The Mapped Appender (`DuckDBMappedAppender<T, TMap>`) adds:
+While the standard [DuckDBAppender](xref:DuckDB.NET.Data.DuckDBAppender) provides efficient bulk loading, it requires manual column ordering and type management. The Mapped Appender ([`DuckDBMappedAppender<T, TMap>`](xref:DuckDB.NET.Data.DuckDBMappedAppender`2)) adds:
 
 - **Type Safety**: Compile-time type checking for property mappings
 - **Automatic Validation**: Runtime verification that mapped types match table schema
@@ -17,8 +17,8 @@ To use a mapped appender, you need to:
 
 1. Define your data class
 2. Create an `AppenderMap` class that defines how properties map to columns
-3. Use `CreateAppender<T, TMap>()` to create a type-safe appender
-4. Call `AppendRecords()` to insert your data
+3. Use [`CreateAppender<T, TMap>()`](xref:DuckDB.NET.Data.DuckDBConnection.CreateAppender*) to create a type-safe appender
+4. Call [`AppendRecords()`](xref:DuckDB.NET.Data.DuckDBMappedAppender`2.AppendRecords*) to insert your data
 
 ### Example
 
@@ -32,18 +32,7 @@ An `AppenderMap` class inherits from [DuckDBAppenderMap&lt;T&gt;](xref:DuckDB.NE
 
 Maps a property to the next column in sequence. The lambda expression extracts the property value from your object.
 
-```csharp
-public class PersonMap : DuckDBAppenderMap<Person>
-{
-    public PersonMap()
-    {
-        Map(p => p.Id);        // Maps to column 0
-        Map(p => p.Name);      // Maps to column 1
-        Map(p => p.Height);    // Maps to column 2
-        Map(p => p.BirthDate); // Maps to column 3
-    }
-}
-```
+[!code-csharp[](../code/MappedAppenderMapClass.cs)]
 
 > [!IMPORTANT]
 > Mappings must be defined in the **exact same order** as the table columns. The first `Map()` call maps to the first column, the second to the second column, etc.
@@ -52,33 +41,13 @@ public class PersonMap : DuckDBAppenderMap<Person>
 
 Uses the column's default value (defined in the table schema) for the next column.
 
-```csharp
-public class PersonMap : DuckDBAppenderMap<Person>
-{
-    public PersonMap()
-    {
-        Map(p => p.Id);
-        Map(p => p.Name);
-        DefaultValue();  // Uses table's default for column 2
-    }
-}
-```
+[!code-csharp[](../code/MappedAppenderDefaultValue.cs)]
 
 ### NullValue()
 
 Inserts a NULL value for the next column.
 
-```csharp
-public class PersonMap : DuckDBAppenderMap<Person>
-{
-    public PersonMap()
-    {
-        Map(p => p.Id);
-        Map(p => p.Name);
-        NullValue();  // Inserts NULL for column 2
-    }
-}
-```
+[!code-csharp[](../code/MappedAppenderNullValue.cs)]
 
 ## Type Validation
 
@@ -110,29 +79,14 @@ The following .NET types are supported for mapping:
 | `BigInteger` | HUGEINT |
 | `DateOnly` (.NET 6+) | DATE |
 | `TimeOnly` (.NET 6+) | TIME |
-| `DuckDBDateOnly` | DATE |
-| `DuckDBTimeOnly` | TIME |
+| [`DuckDBDateOnly`](xref:DuckDB.NET.Native.DuckDBDateOnly) | DATE |
+| [`DuckDBTimeOnly`](xref:DuckDB.NET.Native.DuckDBTimeOnly) | TIME |
 
 Nullable versions of these types (e.g., `int?`, `DateTime?`) are also supported and will write NULL when the value is null.
 
 ### Type Mismatch Example
 
-```csharp
-// Table schema: CREATE TABLE test(id INTEGER, value REAL, date TIMESTAMP);
-
-public class BadMap : DuckDBAppenderMap<MyData>
-{
-    public BadMap()
-    {
-        Map(d => d.Id);        // int -> INTEGER ✓
-        Map(d => d.Date);      // DateTime -> REAL ✗ TYPE MISMATCH!
-        Map(d => d.Value);     // float -> TIMESTAMP ✗ TYPE MISMATCH!
-    }
-}
-
-// This will throw InvalidOperationException when creating the appender
-var appender = connection.CreateAppender<MyData, BadMap>("test");
-```
+[!code-csharp[](../code/MappedAppenderTypeMismatch.cs)]
 
 The error message will indicate exactly which column has the type mismatch:
 ```
@@ -145,19 +99,7 @@ Type mismatch at column index 1: Mapped type is DateTime (expected DuckDB type: 
 
 The [DuckDBConnection](xref:DuckDB.NET.Data.DuckDBConnection) class provides three overloads:
 
-```csharp
-// Simple table name
-public DuckDBMappedAppender<T, TMap> CreateAppender<T, TMap>(string table)
-    where TMap : DuckDBAppenderMap<T>, new()
-
-// Schema and table
-public DuckDBMappedAppender<T, TMap> CreateAppender<T, TMap>(string? schema, string table)
-    where TMap : DuckDBAppenderMap<T>, new()
-
-// Catalog, schema, and table
-public DuckDBMappedAppender<T, TMap> CreateAppender<T, TMap>(string? catalog, string? schema, string table)
-    where TMap : DuckDBAppenderMap<T>, new()
-```
+[!code-csharp[](../code/MappedAppenderCreateOverloads.cs)]
 
 ### DuckDBMappedAppender&lt;T, TMap&gt; Methods
 
@@ -165,19 +107,10 @@ public DuckDBMappedAppender<T, TMap> CreateAppender<T, TMap>(string? catalog, st
 
 Appends multiple records to the table.
 
-```csharp
-var people = new[]
-{
-    new Person { Id = 1, Name = "Alice" },
-    new Person { Id = 2, Name = "Bob" }
-};
-
-using var appender = connection.CreateAppender<Person, PersonMap>("people");
-appender.AppendRecords(people);
-```
+[!code-csharp[](../code/MappedAppenderAppendRecords.cs)]
 
 > [!NOTE]
-> If appending a record fails partway through `AppendRecords` — for example, a property getter throws — that record is discarded and no further records can be appended. Records completed before the failure are written when the appender is closed or disposed. Because DuckDB flushes in batches, the number of records already persisted is not defined; wrap the call in a transaction and roll back on failure if you need all-or-nothing.
+> If appending a record fails partway through `AppendRecords` - for example, a property getter throws - that record is discarded and no further records can be appended. Records completed before the failure are written when the appender is closed or disposed. Because DuckDB flushes in batches, the number of records already persisted is not defined; wrap the call in a transaction and roll back on failure if you need all-or-nothing.
 
 #### Close()
 
@@ -191,12 +124,7 @@ appender.Close();
 
 Disposes the appender and releases resources. Always dispose appenders to ensure data is flushed.
 
-```csharp
-using (var appender = connection.CreateAppender<Person, PersonMap>("people"))
-{
-    appender.AppendRecords(records);
-} // Automatically disposed here
-```
+[!code-csharp[](../code/MappedAppenderDispose.cs)]
 
 ## Complete Example with Default and Null Values
 

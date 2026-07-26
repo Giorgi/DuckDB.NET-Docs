@@ -6,7 +6,7 @@ DuckDB.NET builds the batches with DuckDB's Arrow C Data Interface. Each DuckDB 
 
 ## Stream Arrow record batches
 
-Call `ExecuteArrowStream` to get an `IArrowArrayStream`. The stream exposes the result `Schema` and reads one `RecordBatch` per DuckDB data chunk. You own the returned stream and must dispose it.
+Call [`ExecuteArrowStream`](xref:DuckDB.NET.Data.DuckDBCommand.ExecuteArrowStream) to get an `IArrowArrayStream`. The stream exposes the result `Schema` and reads one `RecordBatch` per DuckDB data chunk. You own the returned stream and must dispose it.
 
 [!code-csharp[](../code/ArrowResultStream.cs "ExecuteArrowStream Example")]
 
@@ -14,7 +14,7 @@ Each column in a batch is an Arrow array. Cast it to the matching Arrow type, su
 
 ## Stream batches asynchronously
 
-`ExecuteArrowBatchesAsync` returns an `IAsyncEnumerable<RecordBatch>` that you consume with `await foreach`. It produces the same batches as `ExecuteArrowStream` and accepts a `CancellationToken`.
+[`ExecuteArrowBatchesAsync`](xref:DuckDB.NET.Data.DuckDBCommand.ExecuteArrowBatchesAsync(System.Threading.CancellationToken)) returns an `IAsyncEnumerable<RecordBatch>` that you consume with `await foreach`. It produces the same batches as `ExecuteArrowStream` and accepts a `CancellationToken`.
 
 [!code-csharp[](../code/ArrowResultBatchesAsync.cs "ExecuteArrowBatchesAsync Example")]
 

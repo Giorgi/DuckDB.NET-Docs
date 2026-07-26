@@ -12,4 +12,4 @@ DuckDB.NET 1.5.0 added a high-level API that lets you register a scalar function
 
 Table-valued functions return collections of rows and can be called anywhere in SQL where you can use a table. In DuckDB they are mostly used to access external data for further data processing.
 
-DuckDB.NET 1.5.0 added a high-level API that uses projection expressions to define columns and mapping in one place, with support for named parameters via the `[Named]` attribute. A low-level API is also available for full control over column definitions and the mapper callback.
+DuckDB.NET 1.5.0 added a high-level API that uses projection expressions to define columns and mapping in one place, with support for named parameters via the [`[Named]`](xref:DuckDB.NET.Data.NamedAttribute) attribute. A low-level API is also available for full control over column definitions and the mapper callback.
