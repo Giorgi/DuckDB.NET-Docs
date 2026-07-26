@@ -40,6 +40,9 @@
       "modern",
       "my-template"
     ],
+    "sitemap": {
+      "baseUrl": "https://duckdb.net"
+    },
     "globalMetadata": {
       "_appName": "DuckDB.NET",
       "_appTitle": "DuckDB.NET",
