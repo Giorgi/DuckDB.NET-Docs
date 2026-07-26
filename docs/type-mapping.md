@@ -2,7 +2,7 @@
 
 The following table lists the mappings between DuckDB types and .NET types. The default type is returned by the [`GetValue`](xref:DuckDB.NET.Data.DuckDBDataReader.GetValue(System.Int32)) method. Non-default types can be read by calling the [`GetFieldValue<T>`](xref:DuckDB.NET.Data.DuckDBDataReader.GetFieldValue``1(System.Int32)) method.
 
-| DuckDB type  | Default .NET type | Default .NET type
+| DuckDB type  | Default .NET type | Non-default .NET types
 | -----------  | ------------      | -----------
 | Boolean      | bool              | &nbsp;
 | TINYINT      | sbyte             | short, int, long, byte, ushort, uint, ulong

@@ -22,13 +22,13 @@ using var duckDBConnection = new DuckDBConnection("DataSource=md:{your_database}
 
 DuckDB has several [configuration options](https://duckdb.org/docs/sql/configuration#configuration-reference) that can be used to change the behavior of the system. These options can be included in the connection string and they will be automatically set when a connection is opened.
 
-## Example connections strings
+## Example connection strings
 
-| Connection String                 | Description |
-| -----------                       | ----------- |
-| DataSource = :memory:             | Connect to a new in-memory database       |
-| DataSource = :memory:?cache=shared| Connect to a shared, in-memory database   |
-| DataSource = train_services.db    | Connect to train_services.db              |
-| DataSource = train_services.db;ACCESS_MODE=READ_ONLY    | Connect to train_services.db, make connection read-only              |
-| DataSource = :memory:;threads=8;ACCESS_MODE=READ_ONLY | Connect to a new in-memory database, limit threads to 8, make connection read-only  |
-| DataSource = train_services.db;ACCESS_MODE=READ_ONLY;memory_limit=10GB | Connect to train_services.db, make connection read-only, limit RAM usage to 10GB|
+| Connection String | Description |
+| ----------- | ----------- |
+| `DataSource = :memory:` | Connect to a new in-memory database |
+| `DataSource = :memory:?cache=shared` | Connect to a shared, in-memory database |
+| `DataSource = train_services.db` | Connect to `train_services.db` |
+| `DataSource = train_services.db;ACCESS_MODE=READ_ONLY` | Connect to `train_services.db`, make connection read-only |
+| `DataSource = :memory:;threads=8;ACCESS_MODE=READ_ONLY` | Connect to a new in-memory database, limit threads to 8, make connection read-only |
+| `DataSource = train_services.db;ACCESS_MODE=READ_ONLY;memory_limit=10GB` | Connect to `train_services.db`, make connection read-only, limit RAM usage to 10GB |
