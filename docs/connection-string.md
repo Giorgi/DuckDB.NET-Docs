@@ -1,3 +1,7 @@
+---
+description: "DuckDB.NET connection string syntax: file-backed and in-memory databases, shared caches, MotherDuck, and DuckDB configuration options."
+---
+
 # Connection String Parameters
 
 To connect to a DuckDB database, a connection string should be specified. The connection string contains information about the target database and other parameters that control different aspects of the database behavior.

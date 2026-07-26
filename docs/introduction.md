@@ -1,3 +1,7 @@
+---
+description: "DuckDB.NET is an open-source ADO.NET provider and low-level bindings library for DuckDB, the fast in-process analytical database."
+---
+
 # Introduction
 
 ## About

@@ -1,3 +1,7 @@
+---
+description: "Read DuckDB query results as Apache Arrow record batches with ExecuteArrowStream and ExecuteArrowBatchesAsync."
+---
+
 # Apache Arrow
 
 [Apache Arrow](https://arrow.apache.org/) is a columnar in-memory format for analytical data. DuckDB.NET can hand you a query result directly as Arrow record batches, so you can move data into Arrow-aware libraries without reading it row by row.

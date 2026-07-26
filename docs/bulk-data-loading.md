@@ -1,3 +1,7 @@
+---
+description: "Bulk load data into DuckDB from .NET with the Appender API: choose between the type-safe Mapped Appender and the low-level Standard Appender."
+---
+
 # Bulk Data Loading Overview
 
 In DuckDB [Appender](https://duckdb.org/docs/data/appender) can be used to efficiently add rows to the database. Appender always appends to a single table in the database.

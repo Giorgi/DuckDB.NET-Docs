@@ -1,3 +1,7 @@
+---
+description: "Install the DuckDB.NET NuGet packages and run your first queries with the ADO.NET provider for DuckDB."
+---
+
 # Getting Started
 
 ## ADO.NET Provider and Low-Level Library

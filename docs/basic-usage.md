@@ -1,3 +1,7 @@
+---
+description: "Execute SQL with DuckDB.NET: ExecuteNonQuery, ExecuteScalar, and ExecuteReader, plus parameterized statements, batching, and streaming mode."
+---
+
 # DuckDB.NET Basic Usage
 
 ## SQL Execution

@@ -1,3 +1,7 @@
+---
+description: "Write DuckDB table-valued functions in C#: projection expressions, named parameters, projection pushdown, and the low-level API."
+---
+
 # Table Functions
 
 ## High-Level API

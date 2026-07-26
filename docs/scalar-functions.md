@@ -1,3 +1,7 @@
+---
+description: "Write DuckDB scalar functions in C#: the high-level Func-based API and the low-level vector API, with NULL handling and variable arguments."
+---
+
 # Scalar User-Defined Functions
 
 ## High-Level API

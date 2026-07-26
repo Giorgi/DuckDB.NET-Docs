@@ -1,3 +1,7 @@
+---
+description: "Extend DuckDB with user-defined scalar and table functions written in C#."
+---
+
 # User-Defined Functions in DuckDB.NET
 
 DuckDB.NET supports creating user-defined functions with C# for extending the functionality of DuckDB.

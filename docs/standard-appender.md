@@ -1,3 +1,7 @@
+---
+description: "Bulk load rows into DuckDB with the low-level standard appender: CreateRow, AppendRow callbacks, failure handling, and transactions."
+---
+
 # Standard Appender
 
 The standard appender is a lower-level API that uses [CreateAppender](xref:DuckDB.NET.Data.DuckDBConnection.CreateAppender(System.String)) to efficiently add rows to the database. Rows are added either with [`CreateRow`](xref:DuckDB.NET.Data.DuckDBAppender.CreateRow) and [`AppendValue`](xref:DuckDB.NET.Data.IDuckDBAppenderRow.AppendValue*), or with the scoped `AppendRow` callback described [below](#appending-rows-with-a-callback).

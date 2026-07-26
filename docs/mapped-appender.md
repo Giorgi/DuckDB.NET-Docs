@@ -1,3 +1,7 @@
+---
+description: "Bulk load .NET objects into DuckDB with the type-safe Mapped Appender: declarative property-to-column mappings with automatic type validation."
+---
+
 # Mapped Appender
 
 The Mapped Appender provides a type-safe way to bulk load data from .NET objects into DuckDB tables. It uses [`DuckDBAppenderMap`](xref:DuckDB.NET.Data.Mapping.DuckDBAppenderMap`1) to define mappings between your object properties and table columns, with automatic type validation.
