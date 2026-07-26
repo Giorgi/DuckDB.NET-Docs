@@ -10,6 +10,6 @@ There are two ways to use appender in .NET:
    - **Declarative Mapping**: Clear property-to-column definitions that prevent ordering errors
    - **Better Maintainability**: Mapping logic separated from data insertion code
 
-2. **Standard Appender** - A lower-level API using [CreateAppender](xref:DuckDB.NET.Data.DuckDBConnection.CreateAppender(System.String)) that requires manual row creation with `CreateRow` and `AppendValue` methods. Use this for maximum performance when type safety is not needed.
+2. **[Standard Appender](standard-appender.md)** - A lower-level API using [CreateAppender](xref:DuckDB.NET.Data.DuckDBConnection.CreateAppender(System.String)) that requires manual row creation with `CreateRow` and `AppendValue` methods. It offers maximum performance, but you must match the table's column order and types yourself — mistakes surface only at runtime.
 
 For most use cases, the [Mapped Appender](mapped-appender.md) is recommended as it eliminates common errors while maintaining excellent performance. Make sure to `Dispose` the appender to avoid data loss.

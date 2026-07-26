@@ -2,7 +2,7 @@
 
 The standard appender is a lower-level API that uses [CreateAppender](xref:DuckDB.NET.Data.DuckDBConnection.CreateAppender(System.String)) to efficiently add rows to the database. Rows are added either with `CreateRow` and `AppendValue`, or with the scoped `AppendRow` callback described [below](#appending-rows-with-a-callback).
 
-Use this approach for maximum performance when type safety is not needed, or when you need fine-grained control over the insertion process.
+Use this approach for maximum performance, or when you need fine-grained control over the insertion process. The appended values must still match the table's column order and types exactly - unlike with the [Mapped Appender](mapped-appender.md), mismatches are not caught up front and surface only at runtime.
 
 > [!CAUTION]
 > When using the standard appender, data types **MUST** match the length of the database types **exactly**. For example when inserting into a UBIGINTEGER column, a ulong such as `0UL` must be used. Writing just `0` will cause data corruption by writing adjacent memory to the database.
@@ -11,11 +11,11 @@ Use this approach for maximum performance when type safety is not needed, or whe
 [!code-csharp[](../code/ManagedAppender.cs)]
 
 > [!TIP]
-> `CreateRow` allocates a new row object on every call. Prefer [AppendRow](#appending-rows-with-a-callback) — it reuses a single row instance and avoids that per-row allocation, so it is the recommended approach for bulk loading. Reach for `CreateRow` only when you need an independent row instance whose lifetime you control.
+> `CreateRow` allocates a new row object on every call. Prefer [AppendRow](#appending-rows-with-a-callback) - it reuses a single row instance and avoids that per-row allocation, so it is the recommended approach for bulk loading. Reach for `CreateRow` only when you need an independent row instance whose lifetime you control.
 
 ## Appending Rows with a Callback
 
-`AppendRow` is the recommended, lower-allocation way to add rows with the standard appender. It scopes the row to a callback and calls `EndRow` for you, and — unlike `CreateRow`, which allocates a new row object per call — it reuses a single row instance across calls. That avoids the per-row allocation, a meaningful saving when loading large numbers of rows.
+`AppendRow` is the recommended, lower-allocation way to add rows with the standard appender. It scopes the row to a callback and calls `EndRow` for you, and - unlike `CreateRow`, which allocates a new row object per call - it reuses a single row instance across calls. That avoids the per-row allocation, a meaningful saving when loading large numbers of rows.
 
 ```csharp
 using (var appender = connection.CreateAppender("AppenderTest"))
@@ -30,7 +30,7 @@ using (var appender = connection.CreateAppender("AppenderTest"))
 }
 ```
 
-The row passed to the callback is valid only for the duration of that callback — do not store it or use it afterwards — and the callback must not call other methods on the same appender.
+The row passed to the callback is valid only for the duration of that callback - do not store it or use it afterwards - and the callback must not call other methods on the same appender.
 
 > [!TIP]
 > For large or hot-path loads, prefer the overload that takes a `state` argument together with a `static` callback, as shown above. A callback that captures variables allocates a closure on every row; passing the captured data through `state` keeps the append allocation-free. For occasional use where allocation is not a concern, the single-argument overload is more concise:
