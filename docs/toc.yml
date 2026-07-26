@@ -9,9 +9,8 @@
 - name: Apache Arrow
   href: arrow.md
 - name: Bulk Data Loading
+  href: bulk-data-loading.md
   items:
-    - name: Overview
-      href: bulk-data-loading.md
     - name: Mapped Appender
       href: mapped-appender.md
     - name: Standard Appender
@@ -21,9 +20,8 @@
 - name: Composite Types and Enums
   href: composite-types.md
 - name: User-Defined Functions (UDFs)
+  href: user-defined-functions.md
   items:
-    - name: Overview
-      href: user-defined-functions.md
     - name: Scalar Functions
       href: scalar-functions.md
     - name: Table Functions
