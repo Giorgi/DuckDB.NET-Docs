@@ -176,6 +176,9 @@ using var appender = connection.CreateAppender<Person, PersonMap>("people");
 appender.AppendRecords(people);
 ```
 
+> [!NOTE]
+> If appending a record fails partway through `AppendRecords` — for example, a property getter throws — that record is discarded and no further records can be appended. Records completed before the failure are written when the appender is closed or disposed. Because DuckDB flushes in batches, the number of records already persisted is not defined; wrap the call in a transaction and roll back on failure if you need all-or-nothing.
+
 #### Close()
 
 Closes the appender and flushes any remaining data to the database. This is called automatically when disposing.
