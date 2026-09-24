@@ -34,9 +34,25 @@ The row passed to the callback is valid only for the duration of that callback -
 
 ## Behavior When a Row Fails
 
+### With AppendRow
+
 If the callback throws, or the row is left incomplete, `AppendRow` discards the failing row and the appender is *faulted*: no further rows can be appended. The rows completed before the failure are still written when you `Close` (or `Dispose`) the appender.
 
 [!code-csharp[](../code/StandardAppenderFailedRow.cs#Example)]
+
+### With CreateRow
+
+A row created with `CreateRow` is written once every column has a value. If appending a value throws, for example because its type doesn't match the column, nothing is written for that column, so you can catch the exception and append a correct value to finish the row:
+
+[!code-csharp[](../code/StandardAppenderCreateRowFailedRow.cs#Retry)]
+
+If you move on without finishing the row, it is discarded: the next `CreateRow` or `AppendRow` call throws and the appender is faulted, just as with `AppendRow`. The rows completed before it are still written when you `Close` (or `Dispose`) the appender.
+
+[!code-csharp[](../code/StandardAppenderCreateRowFailedRow.cs#Skip)]
+
+A row that is still incomplete when the appender is closed, disposed or cleared is discarded without an error.
+
+### Persisted Rows and Transactions
 
 DuckDB flushes completed rows to storage in batches, so the exact number of rows already persisted when a failure occurs is not defined. If you need all-or-nothing semantics, wrap the append in a transaction and roll it back on failure:
 
