@@ -32,7 +32,10 @@ jobs:
         
     - name: Build
       run: dotnet build src/DuckDB.NET/DuckDB.NET.slnx --configuration Release
-    
+
+    - name: Build documentation samples
+      run: dotnet build src/DuckDB.NET-Docs/code --configuration Release
+
     - name: Get docfx
       run: dotnet tool install --version 2.78.5 -g docfx
 

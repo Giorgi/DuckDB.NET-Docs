@@ -36,7 +36,7 @@ An `AppenderMap` class inherits from [DuckDBAppenderMap&lt;T&gt;](xref:DuckDB.NE
 
 Maps a property to the next column in sequence. The lambda expression extracts the property value from your object.
 
-[!code-csharp[](../code/MappedAppenderMapClass.cs)]
+[!code-csharp[](../code/MappedAppenderMapClass.cs#Example)]
 
 > [!IMPORTANT]
 > Mappings must be defined in the **exact same order** as the table columns. The first `Map()` call maps to the first column, the second to the second column, etc.
@@ -45,13 +45,13 @@ Maps a property to the next column in sequence. The lambda expression extracts t
 
 Uses the column's default value (defined in the table schema) for the next column.
 
-[!code-csharp[](../code/MappedAppenderDefaultValue.cs)]
+[!code-csharp[](../code/MappedAppenderDefaultValue.cs#Example)]
 
 ### NullValue()
 
 Inserts a NULL value for the next column.
 
-[!code-csharp[](../code/MappedAppenderNullValue.cs)]
+[!code-csharp[](../code/MappedAppenderNullValue.cs#Example)]
 
 ## Type Validation
 
@@ -90,7 +90,8 @@ Nullable versions of these types (e.g., `int?`, `DateTime?`) are also supported 
 
 ### Type Mismatch Example
 
-[!code-csharp[](../code/MappedAppenderTypeMismatch.cs)]
+[!code-csharp[](../code/MappedAppenderTypeMismatch.cs#Map)]
+[!code-csharp[](../code/MappedAppenderTypeMismatch.cs#Usage)]
 
 The error message will indicate exactly which column has the type mismatch:
 ```
@@ -111,7 +112,7 @@ The [DuckDBConnection](xref:DuckDB.NET.Data.DuckDBConnection) class provides thr
 
 Appends multiple records to the table.
 
-[!code-csharp[](../code/MappedAppenderAppendRecords.cs)]
+[!code-csharp[](../code/MappedAppenderAppendRecords.cs#Example)]
 
 > [!NOTE]
 > If appending a record fails partway through `AppendRecords` - for example, a property getter throws - that record is discarded and no further records can be appended. Records completed before the failure are written when the appender is closed or disposed. Because DuckDB flushes in batches, the number of records already persisted is not defined; wrap the call in a transaction and roll back on failure if you need all-or-nothing.
@@ -128,7 +129,7 @@ appender.Close();
 
 Disposes the appender and releases resources. Always dispose appenders to ensure data is flushed.
 
-[!code-csharp[](../code/MappedAppenderDispose.cs)]
+[!code-csharp[](../code/MappedAppenderDispose.cs#Example)]
 
 ## Complete Example with Default and Null Values
 

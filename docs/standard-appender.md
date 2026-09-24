@@ -12,7 +12,7 @@ Use this approach for maximum performance, or when you need fine-grained control
 > When using the standard appender, data types **MUST** match the length of the database types **exactly**. For example when inserting into a UBIGINTEGER column, a ulong such as `0UL` must be used. Writing just `0` will cause data corruption by writing adjacent memory to the database.
 
 ## Example
-[!code-csharp[](../code/ManagedAppender.cs)]
+[!code-csharp[](../code/ManagedAppender.cs#Example)]
 
 > [!TIP]
 > `CreateRow` allocates a new row object on every call. Prefer [AppendRow](#appending-rows-with-a-callback) - it reuses a single row instance and avoids that per-row allocation, so it is the recommended approach for bulk loading. Reach for `CreateRow` only when you need an independent row instance whose lifetime you control.
@@ -21,7 +21,7 @@ Use this approach for maximum performance, or when you need fine-grained control
 
 [`AppendRow`](xref:DuckDB.NET.Data.DuckDBAppender.AppendRow*) is the recommended, lower-allocation way to add rows with the standard appender. It scopes the row to a callback and calls `EndRow` for you, and - unlike `CreateRow`, which allocates a new row object per call - it reuses a single row instance across calls. That avoids the per-row allocation, a meaningful saving when loading large numbers of rows.
 
-[!code-csharp[](../code/StandardAppenderAppendRow.cs)]
+[!code-csharp[](../code/StandardAppenderAppendRow.cs#Example)]
 
 The row passed to the callback is valid only for the duration of that callback - do not store it or use it afterwards - and the callback must not call other methods on the same appender.
 
@@ -36,17 +36,17 @@ The row passed to the callback is valid only for the duration of that callback -
 
 If the callback throws, or the row is left incomplete, `AppendRow` discards the failing row and the appender is *faulted*: no further rows can be appended. The rows completed before the failure are still written when you `Close` (or `Dispose`) the appender.
 
-[!code-csharp[](../code/StandardAppenderFailedRow.cs)]
+[!code-csharp[](../code/StandardAppenderFailedRow.cs#Example)]
 
 DuckDB flushes completed rows to storage in batches, so the exact number of rows already persisted when a failure occurs is not defined. If you need all-or-nothing semantics, wrap the append in a transaction and roll it back on failure:
 
-[!code-csharp[](../code/StandardAppenderTransaction.cs)]
+[!code-csharp[](../code/StandardAppenderTransaction.cs#Example)]
 
 ## Discarding In-Progress Rows
 
 Call [`Clear()`](xref:DuckDB.NET.Data.DuckDBAppender.Clear) to discard any buffered rows without closing the appender. This lets you roll back a batch and continue appending:
 
-[!code-csharp[](../code/StandardAppenderClear.cs)]
+[!code-csharp[](../code/StandardAppenderClear.cs#Example)]
 
 ## Data Importing from Files
 

@@ -12,9 +12,9 @@ To execute SQL statements in DuckDB.NET you need to create a [`DuckDBConnection`
 - `ExecuteScalar` - Execute SQL that returns a single, scalar value.
 - `ExecuteReader` - Executes SQL and returns [`DuckDBDataReader`](xref:DuckDB.NET.Data.DuckDBDataReader) that can be used to consume the result set.
 
-[!code-csharp[](../code/ExecuteNonQuery.cs "ExecuteNonQuery Example")]
-[!code-csharp[](../code/ExecuteScalar.cs "ExecuteScalar Example")]
-[!code-csharp[](../code/ExecuteReader.cs "ExecuteReader Example")]
+[!code-csharp[](../code/ExecuteNonQuery.cs#Example "ExecuteNonQuery Example")]
+[!code-csharp[](../code/ExecuteScalar.cs#Example "ExecuteScalar Example")]
+[!code-csharp[](../code/ExecuteReader.cs#Example "ExecuteReader Example")]
 
 ## Parameterized statements
 
@@ -22,17 +22,17 @@ When building SQL commands, always use parameterized query instead of string con
 
 [DuckDB supports three syntaxes](https://duckdb.org/docs/sql/query_syntax/prepared_statements) for denoting parameters in prepared statements: auto-incremented (`?`), positional (`$1`), and named (`$param`). All three syntaxes are supported in DuckDB.NET:
 
-[!code-csharp[](../code/BasicUsageParameterizedStatement.cs)]
+[!code-csharp[](../code/BasicUsageParameterizedStatement.cs#Example)]
 
 ## Batching
 
 You can execute multiple statements in a single go by concatenating the statements and delimiting them with a semicolon:
 
-[!code-csharp[](../code/BasicUsageBatching.cs)]
+[!code-csharp[](../code/BasicUsageBatching.cs#Example)]
 
 If the statements return data, you can consume the multiple result sets using the `NextResult` method:
 
-[!code-csharp[](../code/BasicUsageMultipleResultSets.cs)]
+[!code-csharp[](../code/BasicUsageMultipleResultSets.cs#Example)]
 
 ## Materialized and Streaming mode
 

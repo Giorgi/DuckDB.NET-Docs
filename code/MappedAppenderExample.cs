@@ -1,6 +1,7 @@
 using DuckDB.NET.Data;
 using DuckDB.NET.Data.Mapping;
-using System;
+
+namespace Samples.MappedAppenderExample;
 
 // Define your data class
 public class Person
@@ -23,35 +24,41 @@ public class PersonMap : DuckDBAppenderMap<Person>
     }
 }
 
-// Use the mapped appender
-using var connection = new DuckDBConnection("DataSource=:memory:");
-connection.Open();
-
-// Create table
-using (var command = connection.CreateCommand())
+public static class Example
 {
-    command.CommandText = "CREATE TABLE person(id INTEGER, name VARCHAR, height REAL, birth_date TIMESTAMP);";
-    command.ExecuteNonQuery();
-}
+    public static void Run()
+    {
+        // Use the mapped appender
+        using var connection = new DuckDBConnection("DataSource=:memory:");
+        connection.Open();
 
-// Prepare data
-var people = new[]
-{
-    new Person { Id = 1, Name = "Alice", Height = 1.65f, BirthDate = new DateTime(1990, 1, 15) },
-    new Person { Id = 2, Name = "Bob", Height = 1.80f, BirthDate = new DateTime(1985, 5, 20) },
-    new Person { Id = 3, Name = "Charlie", Height = 1.75f, BirthDate = new DateTime(1992, 8, 30) }
-};
+        // Create table
+        using (var command = connection.CreateCommand())
+        {
+            command.CommandText = "CREATE TABLE person(id INTEGER, name VARCHAR, height REAL, birth_date TIMESTAMP);";
+            command.ExecuteNonQuery();
+        }
 
-// Insert data using mapped appender
-using (var appender = connection.CreateAppender<Person, PersonMap>("person"))
-{
-    appender.AppendRecords(people);
-}
+        // Prepare data
+        var people = new[]
+        {
+            new Person { Id = 1, Name = "Alice", Height = 1.65f, BirthDate = new DateTime(1990, 1, 15) },
+            new Person { Id = 2, Name = "Bob", Height = 1.80f, BirthDate = new DateTime(1985, 5, 20) },
+            new Person { Id = 3, Name = "Charlie", Height = 1.75f, BirthDate = new DateTime(1992, 8, 30) }
+        };
 
-// Verify data was inserted
-using (var command = connection.CreateCommand())
-{
-    command.CommandText = "SELECT COUNT(*) FROM person";
-    var count = command.ExecuteScalar();
-    Console.WriteLine($"Inserted {count} records");
+        // Insert data using mapped appender
+        using (var appender = connection.CreateAppender<Person, PersonMap>("person"))
+        {
+            appender.AppendRecords(people);
+        }
+
+        // Verify data was inserted
+        using (var command = connection.CreateCommand())
+        {
+            command.CommandText = "SELECT COUNT(*) FROM person";
+            var count = command.ExecuteScalar();
+            Console.WriteLine($"Inserted {count} records");
+        }
+    }
 }

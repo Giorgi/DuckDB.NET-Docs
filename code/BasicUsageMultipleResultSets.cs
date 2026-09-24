@@ -1,11 +1,23 @@
-using var connection = new DuckDBConnection("DataSource=:memory:");
-connection.Open();
+using DuckDB.NET.Data;
 
-using var command = connection.CreateCommand();
-command.CommandText = "SELECT * FROM weather ORDER BY city, temp_lo;SELECT DISTINCT city FROM weather;";
-using var reader = command.ExecuteReader();
+namespace Samples.Snippets;
 
-do
+public static class BasicUsageMultipleResultSets
 {
-  //consume data from the reader
-} while (reader.NextResult());
+    public static void Run()
+    {
+        #region Example
+        using var connection = new DuckDBConnection("DataSource=:memory:");
+        connection.Open();
+
+        using var command = connection.CreateCommand();
+        command.CommandText = "SELECT * FROM weather ORDER BY city, temp_lo;SELECT DISTINCT city FROM weather;";
+        using var reader = command.ExecuteReader();
+
+        do
+        {
+          //consume data from the reader
+        } while (reader.NextResult());
+        #endregion
+    }
+}

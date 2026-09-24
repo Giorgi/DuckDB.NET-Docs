@@ -1,10 +1,22 @@
-using (var appender = connection.CreateAppender("AppenderTest"))
+using DuckDB.NET.Data;
+
+namespace Samples.Snippets;
+
+public static class StandardAppenderAppendRow
 {
-    for (var i = 0; i < rows; i++)
+    public static void Run(DuckDBConnection connection, int rows)
     {
-        appender.AppendRow(i, static (row, value) =>
+        #region Example
+        using (var appender = connection.CreateAppender("AppenderTest"))
         {
-            row.AppendValue(value).AppendValue(value + 2);
-        });
+            for (var i = 0; i < rows; i++)
+            {
+                appender.AppendRow(i, static (row, value) =>
+                {
+                    row.AppendValue(value).AppendValue(value + 2);
+                });
+            }
+        }
+        #endregion
     }
 }

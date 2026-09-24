@@ -19,11 +19,11 @@ In both cases, two [NuGet packages](https://www.nuget.org/packages?q=Tags%3A%22D
 
 ## Using ADO.NET Provider
 
-```sh
+```shell
 dotnet add package DuckDB.NET.Data.Full
 ```
 
 DuckDB.NET follows the ADO.NET provider model and its API.
 The following snippet shows how to run basic operations:
 
-[!code-csharp[](../code/GettingStarted.cs)]
+[!code-csharp[](../code/GettingStarted.cs#Example)]

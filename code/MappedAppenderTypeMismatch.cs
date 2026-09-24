@@ -1,3 +1,10 @@
+using DuckDB.NET.Data;
+using DuckDB.NET.Data.Mapping;
+using Samples;
+
+namespace Samples.Snippets.TypeMismatchSnippet;
+
+#region Map
 // Table schema: CREATE TABLE test(id INTEGER, value REAL, date TIMESTAMP);
 
 public class BadMap : DuckDBAppenderMap<MyData>
@@ -9,6 +16,15 @@ public class BadMap : DuckDBAppenderMap<MyData>
         Map(d => d.Value);     // float -> TIMESTAMP ✗ TYPE MISMATCH!
     }
 }
+#endregion
 
-// This will throw InvalidOperationException when creating the appender
-var appender = connection.CreateAppender<MyData, BadMap>("test");
+public static class Usage
+{
+    public static void Run(DuckDBConnection connection)
+    {
+        #region Usage
+        // This will throw InvalidOperationException when creating the appender
+        var appender = connection.CreateAppender<MyData, BadMap>("test");
+        #endregion
+    }
+}

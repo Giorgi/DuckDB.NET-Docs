@@ -1,14 +1,27 @@
-connection.RegisterScalarFunction<object, string, string>("to_string", (readers, writer, rowCount) =>
+using System.Globalization;
+using DuckDB.NET.Data;
+
+namespace Samples.Snippets;
+
+public static class ScalarFunctionAnyInputType
 {
-    for (ulong index = 0; index < rowCount; index++)
+    public static void Run(DuckDBConnection connection)
     {
-        var format = readers[1].GetValue<string>(index);
-
-        var value = readers[0].GetValue(index);
-
-        if (value is IFormattable formattable)
+        #region Example
+        connection.RegisterScalarFunction<object, string, string>("to_string", (readers, writer, rowCount) =>
         {
-            writer.WriteValue(formattable.ToString(format, CultureInfo.InvariantCulture), index);
-        }
+            for (ulong index = 0; index < rowCount; index++)
+            {
+                var format = readers[1].GetValue<string>(index);
+
+                var value = readers[0].GetValue(index);
+
+                if (value is IFormattable formattable)
+                {
+                    writer.WriteValue(formattable.ToString(format, CultureInfo.InvariantCulture), index);
+                }
+            }
+        });
+        #endregion
     }
-});
+}

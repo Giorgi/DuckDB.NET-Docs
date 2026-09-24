@@ -1,8 +1,20 @@
-connection.RegisterScalarFunction<string, string>("echo_nullable", (readers, writer, rowCount) =>
+using DuckDB.NET.Data;
+
+namespace Samples.Snippets;
+
+public static class ScalarFunctionNullHandling
 {
-    for (ulong i = 0; i < rowCount; i++)
+    public static void Run(DuckDBConnection connection)
     {
-        var value = readers[0].GetValue<string>(i);
-        writer.WriteValue(value ?? "was_null", i);
+        #region Example
+        connection.RegisterScalarFunction<string, string>("echo_nullable", (readers, writer, rowCount) =>
+        {
+            for (ulong i = 0; i < rowCount; i++)
+            {
+                var value = readers[0].GetValue<string>(i);
+                writer.WriteValue(value ?? "was_null", i);
+            }
+        }, new() { HandlesNulls = true });
+        #endregion
     }
-}, new() { HandlesNulls = true });
+}

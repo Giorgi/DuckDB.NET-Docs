@@ -1,3 +1,8 @@
+using DuckDB.NET.Data.Mapping;
+
+namespace Samples.Snippets.MappedAppenderNullValueSnippet;
+
+#region Example
 public class PersonMap : DuckDBAppenderMap<Person>
 {
     public PersonMap()
@@ -7,3 +12,4 @@ public class PersonMap : DuckDBAppenderMap<Person>
         NullValue();  // Inserts NULL for column 2
     }
 }
+#endregion

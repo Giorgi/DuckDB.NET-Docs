@@ -1,3 +1,8 @@
+using DuckDB.NET.Data.Mapping;
+
+namespace Samples.Snippets.MappedAppenderMapClassSnippet;
+
+#region Example
 public class PersonMap : DuckDBAppenderMap<Person>
 {
     public PersonMap()
@@ -8,3 +13,4 @@ public class PersonMap : DuckDBAppenderMap<Person>
         Map(p => p.BirthDate); // Maps to column 3
     }
 }
+#endregion
