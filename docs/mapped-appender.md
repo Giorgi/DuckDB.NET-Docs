@@ -80,13 +80,15 @@ The following .NET types are supported for mapping:
 | `DateTimeOffset` | TIMESTAMPTZ |
 | `TimeSpan` | INTERVAL |
 | `Guid` | UUID |
-| `BigInteger` | HUGEINT |
+| `BigInteger` | HUGEINT, UHUGEINT |
 | `DateOnly` (.NET 6+) | DATE |
 | `TimeOnly` (.NET 6+) | TIME |
 | [`DuckDBDateOnly`](xref:DuckDB.NET.Native.DuckDBDateOnly) | DATE |
 | [`DuckDBTimeOnly`](xref:DuckDB.NET.Native.DuckDBTimeOnly) | TIME |
 
 Nullable versions of these types (e.g., `int?`, `DateTime?`) are also supported and will write NULL when the value is null.
+
+A `BigInteger` property can be mapped to a HUGEINT or a UHUGEINT column. The column's range is checked for each value when it is appended, not when the appender is created: a value outside the range, such as a negative number for a UHUGEINT column, throws `ArgumentOutOfRangeException`.
 
 ### Type Mismatch Example
 
