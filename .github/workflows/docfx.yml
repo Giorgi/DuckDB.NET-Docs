@@ -43,6 +43,7 @@ jobs:
       run: docfx --warningsAsErrors src/DuckDB.NET-Docs/docfx.json
 
     - name: Deploy to Netlify
+      if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
       uses: South-Paw/action-netlify-cli@v2
       id: netlify
       with:

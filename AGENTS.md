@@ -21,7 +21,7 @@ passes locally fails the build there, so fix every DocFX warning: broken links, 
 ## Publishing
 
 Every push to `main` builds the site and deploys it to production; there is no staging step. The workflow also runs
-for pull requests to `main`, and its deploy step has no condition.
+for pull requests to `main`, but only to build: the deploy step runs only for a push or manual run on `main`.
 
 CI checks out the **default branch of DuckDB.NET, which is `develop`**, and builds the API reference and the samples
 against it. So the published API reference shows `develop`, which can be ahead of the released NuGet package.
