@@ -1,5 +1,5 @@
 ---
-description: "DuckDB.NET connection string syntax: file-backed and in-memory databases, shared caches, MotherDuck, and DuckDB configuration options."
+description: "DuckDB.NET connection string syntax: file-backed and in-memory databases, shared caches, MotherDuck, and DuckDB configuration options, including the typed DuckDBConnectionStringBuilder properties."
 ---
 
 # Connection String Parameters
@@ -24,7 +24,49 @@ using var duckDBConnection = new DuckDBConnection("DataSource=md:{your_database}
 
 ## DuckDB configuration
 
-DuckDB has several [configuration options](https://duckdb.org/docs/sql/configuration#configuration-reference) that can be used to change the behavior of the system. These options can be included in the connection string and they will be automatically set when a connection is opened.
+DuckDB has many [configuration options](https://duckdb.org/docs/sql/configuration#configuration-reference) that change how it behaves. Add them to the connection string as keywords, and DuckDB.NET sets them when it opens the database. For example, `DataSource=train_services.db;access_mode=READ_ONLY;threads=8` opens the database read-only and limits DuckDB to 8 threads.
+
+- A keyword that isn't a DuckDB configuration option throws an `InvalidOperationException`.
+- Some options can't be set when the database opens, and opening the connection fails with an error such as `Error setting 'enable_progress_bar' to 'false'`. Set these options with a [`SET`](https://duckdb.org/docs/sql/statements/set) statement after the connection is open.
+- An option that takes a list of values needs the value in DuckDB's list syntax, in double quotes because it contains single quotes: `extension_directories="['/ext1', '/ext2']"`. [DuckDBConnectionStringBuilder](xref:DuckDB.NET.Data.DuckDBConnectionStringBuilder) adds the double quotes when you set the value through its indexer.
+- `allowed_directories` and `allowed_paths` can't be set in the connection string at all, because of a DuckDB bug ([duckdb/duckdb#25057](https://github.com/duckdb/duckdb/issues/25057)). Set them with `SET` after the connection is open, for example `SET allowed_directories = ['/data'];`.
+
+### Typed properties
+
+Starting with version 1.5.6, [DuckDBConnectionStringBuilder](xref:DuckDB.NET.Data.DuckDBConnectionStringBuilder) has typed properties for 24 options that can be set when the database opens. Each property reads and writes the keyword in the table below. Set a property to `null` to leave its option out of the connection string, so that DuckDB's default applies.
+
+[!code-csharp[](../code/ConnectionStringBuilderOptions.cs#Example)]
+
+| Category | Property | Keyword | Type |
+| ----------- | ----------- | ----------- | ----------- |
+| Data Source | [AccessMode](xref:DuckDB.NET.Data.DuckDBConnectionStringBuilder.AccessMode) | `access_mode` | [DuckDBAccessMode](xref:DuckDB.NET.Data.DuckDBAccessMode) |
+| Resources | [Threads](xref:DuckDB.NET.Data.DuckDBConnectionStringBuilder.Threads) | `threads` | `int` |
+| Resources | [ExternalThreads](xref:DuckDB.NET.Data.DuckDBConnectionStringBuilder.ExternalThreads) | `external_threads` | `int` |
+| Resources | [MemoryLimit](xref:DuckDB.NET.Data.DuckDBConnectionStringBuilder.MemoryLimit) | `memory_limit` | `string` |
+| Resources | [TempDirectory](xref:DuckDB.NET.Data.DuckDBConnectionStringBuilder.TempDirectory) | `temp_directory` | `string` |
+| Resources | [MaxTempDirectorySize](xref:DuckDB.NET.Data.DuckDBConnectionStringBuilder.MaxTempDirectorySize) | `max_temp_directory_size` | `string` |
+| Storage | [CheckpointThreshold](xref:DuckDB.NET.Data.DuckDBConnectionStringBuilder.CheckpointThreshold) | `checkpoint_threshold` | `string` |
+| Storage | [StorageCompatibilityVersion](xref:DuckDB.NET.Data.DuckDBConnectionStringBuilder.StorageCompatibilityVersion) | `storage_compatibility_version` | `string` |
+| Security | [EnableExternalAccess](xref:DuckDB.NET.Data.DuckDBConnectionStringBuilder.EnableExternalAccess) | `enable_external_access` | `bool` |
+| Security | [AllowUnsignedExtensions](xref:DuckDB.NET.Data.DuckDBConnectionStringBuilder.AllowUnsignedExtensions) | `allow_unsigned_extensions` | `bool` |
+| Security | [AllowCommunityExtensions](xref:DuckDB.NET.Data.DuckDBConnectionStringBuilder.AllowCommunityExtensions) | `allow_community_extensions` | `bool` |
+| Security | [AllowPersistentSecrets](xref:DuckDB.NET.Data.DuckDBConnectionStringBuilder.AllowPersistentSecrets) | `allow_persistent_secrets` | `bool` |
+| Security | [SecretDirectory](xref:DuckDB.NET.Data.DuckDBConnectionStringBuilder.SecretDirectory) | `secret_directory` | `string` |
+| Security | [LockConfiguration](xref:DuckDB.NET.Data.DuckDBConnectionStringBuilder.LockConfiguration) | `lock_configuration` | `bool` |
+| Extensions | [AutoloadKnownExtensions](xref:DuckDB.NET.Data.DuckDBConnectionStringBuilder.AutoloadKnownExtensions) | `autoload_known_extensions` | `bool` |
+| Extensions | [AutoinstallKnownExtensions](xref:DuckDB.NET.Data.DuckDBConnectionStringBuilder.AutoinstallKnownExtensions) | `autoinstall_known_extensions` | `bool` |
+| Extensions | [ExtensionDirectory](xref:DuckDB.NET.Data.DuckDBConnectionStringBuilder.ExtensionDirectory) | `extension_directory` | `string` |
+| Extensions | [CustomExtensionRepository](xref:DuckDB.NET.Data.DuckDBConnectionStringBuilder.CustomExtensionRepository) | `custom_extension_repository` | `string` |
+| Query | [DefaultOrder](xref:DuckDB.NET.Data.DuckDBConnectionStringBuilder.DefaultOrder) | `default_order` | [DuckDBSortOrder](xref:DuckDB.NET.Data.DuckDBSortOrder) |
+| Query | [DefaultNullOrder](xref:DuckDB.NET.Data.DuckDBConnectionStringBuilder.DefaultNullOrder) | `default_null_order` | [DuckDBNullOrder](xref:DuckDB.NET.Data.DuckDBNullOrder) |
+| Query | [DefaultCollation](xref:DuckDB.NET.Data.DuckDBConnectionStringBuilder.DefaultCollation) | `default_collation` | `string` |
+| Query | [PreserveInsertionOrder](xref:DuckDB.NET.Data.DuckDBConnectionStringBuilder.PreserveInsertionOrder) | `preserve_insertion_order` | `bool` |
+| Client | [CustomUserAgent](xref:DuckDB.NET.Data.DuckDBConnectionStringBuilder.CustomUserAgent) | `custom_user_agent` | `string` |
+| Client | [ErrorsAsJson](xref:DuckDB.NET.Data.DuckDBConnectionStringBuilder.ErrorsAsJson) | `errors_as_json` | `bool` |
+
+Properties of type `int` and `bool` are nullable. [Threads](xref:DuckDB.NET.Data.DuckDBConnectionStringBuilder.Threads) must be at least 1. Sizes such as [MemoryLimit](xref:DuckDB.NET.Data.DuckDBConnectionStringBuilder.MemoryLimit) are strings in DuckDB's format, for example `10GB`.
+
+The builder stores both `Data Source` and `DataSource` as `DataSource`, so a connection string can't hold two different data sources.
 
 ## Example connection strings
 
