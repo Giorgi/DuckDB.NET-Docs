@@ -26,4 +26,20 @@
       href: scalar-functions.md
     - name: Table Functions
       href: table-functions.md
-  
+- name: Release Notes
+  href: release-notes.md
+  items:
+    - name: DuckDB.NET 1.5
+      href: release-notes/1.5.md
+    - name: DuckDB.NET 1.4
+      href: release-notes/1.4.md
+    - name: DuckDB.NET 1.3
+      href: release-notes/1.3.md
+    - name: DuckDB.NET 1.2
+      href: release-notes/1.2.md
+    - name: DuckDB.NET 1.1
+      href: release-notes/1.1.md
+    - name: DuckDB.NET 1.0
+      href: release-notes/1.0.md
+    - name: DuckDB.NET 0.x
+      href: release-notes/0.x.md
