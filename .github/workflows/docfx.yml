@@ -11,6 +11,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
     - name: Check out docs
@@ -30,9 +31,8 @@ jobs:
       with:
         global-json-file: src/DuckDB.NET/global.json
         
-    - name: Build
-      run: dotnet build src/DuckDB.NET/DuckDB.NET.slnx --configuration Release
-
+    # Also restores and builds Bindings and Data for net8.0, which is all docfx needs for the API reference.
+    # Building the whole DuckDB.NET solution took about 37 s more.
     - name: Build documentation samples
       run: dotnet build src/DuckDB.NET-Docs/code --configuration Release
 
@@ -42,14 +42,36 @@ jobs:
     - name: Build docs
       run: docfx --warningsAsErrors src/DuckDB.NET-Docs/docfx.json
 
+    # Uploads the site as a zip through the Netlify API, which publishes it to production. The Netlify CLI action
+    # installed the CLI from npm on every run, about 30 of its 50 s.
     - name: Deploy to Netlify
       if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
-      uses: South-Paw/action-netlify-cli@v2
-      id: netlify
-      with:
-        # note that the --json flag has been passed so we can parse outputs
-        args: deploy --prod --json --dir './src/DuckDB.NET-Docs/_site' --message 'Auto deploy [${{ github.sha }}]'
+      working-directory: src/DuckDB.NET-Docs/_site
+      shell: bash
       env:
         NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
         NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        TITLE: Auto deploy [${{ github.sha }}]
+      run: |
+        zip -qr "$RUNNER_TEMP/site.zip" .
+        api=https://api.netlify.com/api/v1
+        title=$(jq -rn --arg title "$TITLE" '$title | @uri')
+        # No --retry on the upload: curl retries a POST too, which could create a second deploy.
+        response=$(curl -sS --fail-with-body --max-time 120 -H "Authorization: Bearer $NETLIFY_AUTH_TOKEN" \
+          -H "Content-Type: application/zip" --data-binary "@$RUNNER_TEMP/site.zip" \
+          "$api/sites/$NETLIFY_SITE_ID/deploys?title=$title") || { echo "Upload failed: $response"; exit 1; }
+        id=$(jq -r .id <<< "$response")
+        [ -n "$id" ] && [ "$id" != null ] || { echo "Netlify did not return a deploy id: $response"; exit 1; }
+        for attempt in $(seq 60); do
+          deploy=$(curl -sSf --retry 3 --retry-delay 2 --max-time 30 -H "Authorization: Bearer $NETLIFY_AUTH_TOKEN" \
+            "$api/deploys/$id")
+          state=$(jq -r .state <<< "$deploy")
+          case "$state" in
+            ready) echo "Deployed $id: $(jq -r .ssl_url <<< "$deploy")"; exit 0 ;;
+            error|rejected) echo "Deploy $id $state: $(jq -r .error_message <<< "$deploy")"; exit 1 ;;
+          esac
+          sleep 2
+        done
+        echo "Deploy $id was still '$state' after 2 minutes"
+        exit 1
     
