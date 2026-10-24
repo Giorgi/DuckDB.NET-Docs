@@ -51,7 +51,7 @@ You can combine `object` with typed parameters:
 
 ### NULL Handling
 
-By default, DuckDB short-circuits NULLs: if any input is NULL, the result is NULL and your function is never called. To handle NULLs explicitly, use nullable parameter types (`int?`, `string?`). DuckDB.NET detects nullable parameters at registration time and configures the function automatically:
+By default, NULLs are short-circuited: for a row where any input is NULL, the result is NULL and your function is not called for that row. This holds for a constant NULL and for NULL rows of a column alike. To handle NULLs explicitly, use nullable parameter types (`int?`, `string?`). DuckDB.NET detects nullable parameters at registration time and configures the function automatically:
 
 [!code-csharp[](../code/ScalarFunctionNullableParameter.cs#Example)]
 
@@ -60,7 +60,7 @@ SELECT describe_val(42);        -- '42'
 SELECT describe_val(NULL::INT); -- 'nothing'
 ```
 
-This works for reference types too - `string?` (with nullable annotations enabled) opts into null handling, while `string` keeps default NULL propagation:
+This works for reference types too - `string?` opts into null handling, while `string` keeps default NULL propagation. `[AllowNull] string` opts in as well. In a project without nullable annotations a plain `string` is not nullable either, so `string?` (the compiler warns, CS8632, but the annotation is kept) or `[AllowNull] string` is how such a function receives `null`:
 
 [!code-csharp[](../code/ScalarFunctionNullableReference.cs#Example)]
 
@@ -117,7 +117,12 @@ SELECT id, to_string(id, 'G'), order_date, to_string(order_date, 'dd-MM-yyyy'), 
 
 ### NULL Handling
 
-To handle NULLs with the low-level API, pass `HandlesNulls = true` via [`ScalarFunctionOptions`](xref:DuckDB.NET.Data.ScalarFunctionOptions). In scalar function callbacks, `GetValue<T>` returns `null` for NULL rows when `T` is a nullable type (`int?`, `string`, etc.):
+The low-level API passes the rows on as DuckDB sends them, and does not skip NULLs for you:
+
+- **For a column, the callback gets every row, NULL rows included,** with `HandlesNulls` true or false. Whatever the callback writes for a NULL row is the result; DuckDB does not replace it with NULL. So check `readers[i].IsValid(index)` for every row, and call `writer.WriteNull(index)` where the result should be NULL.
+- **A constant NULL argument** (`SELECT f(NULL)`) is the only case DuckDB answers itself: without `HandlesNulls`, the result is NULL and the callback is not called. With `HandlesNulls = true` (set via [`ScalarFunctionOptions`](xref:DuckDB.NET.Data.ScalarFunctionOptions)), the callback is called for it too.
+
+In scalar function callbacks, `GetValue<T>` returns `null` for NULL rows when `T` is a nullable type (`int?`, `string`, etc.), and throws for a non-nullable value type such as `int`:
 
 [!code-csharp[](../code/ScalarFunctionNullHandling.cs#Example)]
 
