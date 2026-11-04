@@ -82,9 +82,10 @@ The following .NET types are supported for mapping:
 | `Guid` | UUID |
 | `BigInteger` | HUGEINT, UHUGEINT |
 | `DateOnly` (.NET 6+) | DATE |
-| `TimeOnly` (.NET 6+) | TIME |
+| `TimeOnly` (.NET 6+) | TIME, TIME_NS |
 | [`DuckDBDateOnly`](xref:DuckDB.NET.Native.DuckDBDateOnly) | DATE |
-| [`DuckDBTimeOnly`](xref:DuckDB.NET.Native.DuckDBTimeOnly) | TIME |
+| [`DuckDBTimeOnly`](xref:DuckDB.NET.Native.DuckDBTimeOnly) | TIME, TIME_NS |
+| [`DuckDBTimeNs`](xref:DuckDB.NET.Native.DuckDBTimeNs) | TIME_NS |
 
 Nullable versions of these types (e.g., `int?`, `DateTime?`) are also supported and will write NULL when the value is null.
 

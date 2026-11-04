@@ -28,6 +28,7 @@ The following table lists the mappings between DuckDB types and .NET types. The 
 | BIT          | string            | BitArray
 | DATE         | DateTime/DateOnly | DateTime, DateOnly, DuckDBDateOnly
 | TIME         | TimeOnly          | TimeSpan, DateTime, DuckDBTimeOnly
+| TIME_NS      | TimeOnly          | TimeSpan, DateTime, DuckDBTimeOnly, DuckDBTimeNs
 | TIMETZ       | DateTimeOffset    | DuckDBTimeTz
 | TIMESTAMP    | DateTime          | DuckDBTimestamp
 | TIMESTAMP_NS | DateTime          | DuckDBTimestamp
@@ -44,3 +45,7 @@ The following table lists the mappings between DuckDB types and .NET types. The 
 
 > [!NOTE]
 > A `TIMETZ` has no date. Read as `DateTimeOffset`, it is placed on 0001-01-02 so that a time earlier in the day than its positive offset can be represented.
+
+> A `TIME_NS` keeps nanoseconds in DuckDB. `TimeOnly`, `DateTime`, and `TimeSpan` expose 100-nanosecond ticks; `DuckDBTimeOnly` exposes whole microseconds, while `DuckDBTimeNs` exposes the stored nanoseconds.
+
+> A `TimeSpan` command parameter is an `INTERVAL` by default. To use it as a `TIME_NS` value, set its `DbType` to `Time`; the value must be non-negative and less than one day, and its .NET ticks are preserved.
