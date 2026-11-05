@@ -31,7 +31,9 @@ jobs:
       with:
         global-json-file: src/DuckDB.NET/global.json
         
-    # Also restores and builds Bindings and Data for net8.0, which is all docfx needs for the API reference.
+    # The samples target net10.0, so they compile as C# 14: IDuckDBAppenderRow lowers overloads with
+    # OverloadResolutionPriority, which C# 12 ignores. The build also restores Bindings and Data, which is all
+    # docfx needs for the API reference (still read for net8.0).
     # Building the whole DuckDB.NET solution took about 37 s more.
     - name: Build documentation samples
       run: dotnet build src/DuckDB.NET-Docs/code --configuration Release
