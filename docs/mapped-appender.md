@@ -85,7 +85,6 @@ The following .NET types are supported for mapping:
 | `TimeOnly` (.NET 6+) | TIME, TIME_NS |
 | [`DuckDBDateOnly`](xref:DuckDB.NET.Native.DuckDBDateOnly) | DATE |
 | [`DuckDBTimeOnly`](xref:DuckDB.NET.Native.DuckDBTimeOnly) | TIME, TIME_NS |
-| [`DuckDBTimeNs`](xref:DuckDB.NET.Native.DuckDBTimeNs) | TIME_NS |
 
 Nullable versions of these types (e.g., `int?`, `DateTime?`) are also supported and will write NULL when the value is null.
 
