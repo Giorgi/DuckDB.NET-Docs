@@ -12,10 +12,10 @@ public static class GettingStarted
 
         using var command = duckDBConnection.CreateCommand();
         command.CommandText = "CREATE TABLE integers(foo INTEGER, bar INTEGER);";
-        var executeNonQuery = command.ExecuteNonQuery();
+        command.ExecuteNonQuery();
 
         command.CommandText = "INSERT INTO integers VALUES (3, 4), (5, 6), (7, NULL);";
-        executeNonQuery = command.ExecuteNonQuery();
+        var rowsInserted = command.ExecuteNonQuery(); // 3
 
         command.CommandText = "Select count(*) from integers";
         var count = command.ExecuteScalar();

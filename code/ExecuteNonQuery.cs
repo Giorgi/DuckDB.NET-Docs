@@ -12,13 +12,13 @@ public static class ExecuteNonQuery
 
         using var command = duckDBConnection.CreateCommand();
         command.CommandText = "CREATE TABLE weather (city VARCHAR, temp_lo INTEGER, temp_hi INTEGER, prcp REAL, date DATE);";
-        var executeNonQuery = command.ExecuteNonQuery();
+        command.ExecuteNonQuery(); // -1, CREATE TABLE reports no row count
 
         command.CommandText = "INSERT INTO weather VALUES ('Tbilisi', 41, 55, 0.1, '2020-04-02');";
-        executeNonQuery = command.ExecuteNonQuery();
+        var rowsInserted = command.ExecuteNonQuery(); // 1
 
         command.CommandText = "INSERT INTO weather VALUES ('San Francisco', 46, 50, 0.25, '1994-11-27');";
-        executeNonQuery = command.ExecuteNonQuery();
+        rowsInserted = command.ExecuteNonQuery(); // 1
         #endregion
     }
 }
