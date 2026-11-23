@@ -17,6 +17,8 @@ In both cases, two [NuGet packages](https://www.nuget.org/packages?q=Tags%3A%22D
 | DuckDB.NET.Data | :white_check_mark: | :x: |
 | DuckDB.NET.Data.**Full** | :white_check_mark: | :white_check_mark: |
 
+DuckDB.NET.Data depends on DuckDB.NET.Bindings of the same major version, and DuckDB.NET.Data.Full on DuckDB.NET.Bindings.Full. If your project also references a bindings package directly, keep it on the same major version as the ADO.NET Provider.
+
 ## Using ADO.NET Provider
 
 ```shell
