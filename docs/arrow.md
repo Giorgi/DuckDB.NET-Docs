@@ -8,6 +8,8 @@ description: "Read DuckDB query results as Apache Arrow record batches with Exec
 
 DuckDB.NET builds the batches with DuckDB's Arrow C Data Interface. Each DuckDB data chunk becomes an Arrow `RecordBatch` with no per-value marshaling. The Arrow types come from the [`Apache.Arrow`](https://www.nuget.org/packages/Apache.Arrow) package, which ships as a dependency of `DuckDB.NET.Data`, so you do not need to add it yourself.
 
+To write Arrow record batches to a table, use the [Arrow Appender](arrow-appender.md).
+
 ## Stream Arrow record batches
 
 Call [`ExecuteArrowStream`](xref:DuckDB.NET.Data.DuckDBCommand.ExecuteArrowStream) to get an `IArrowArrayStream`. The stream exposes the result `Schema` and reads one `RecordBatch` per DuckDB data chunk. You own the returned stream and must dispose it.

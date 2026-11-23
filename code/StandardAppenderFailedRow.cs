@@ -9,13 +9,13 @@ public static class StandardAppenderFailedRow
         #region Example
         using (var appender = connection.CreateAppender("AppenderTest"))
         {
-            appender.AppendRow(row => row.AppendValue(1).AppendValue(2)); // completed
+            appender.AppendRow(row => row.AppendValue((int?)1).AppendValue((int?)2)); // completed
 
             try
             {
                 appender.AppendRow(row =>
                 {
-                    row.AppendValue(3).AppendValue(4);
+                    row.AppendValue((int?)3).AppendValue((int?)4);
                     throw new InvalidOperationException("something went wrong");
                 });
             }

@@ -6,7 +6,7 @@ description: "Bulk load data into DuckDB from .NET with the Appender API: choose
 
 In DuckDB [Appender](https://duckdb.org/docs/data/appender) can be used to efficiently add rows to the database. Appender always appends to a single table in the database.
 
-There are two ways to use appender in .NET:
+There are three ways to use appender in .NET:
 
 1. **[Mapped Appender](mapped-appender.md) (Recommended)** - A strongly-typed appender that provides:
    - **Type Safety**: Compile-time type checking for property mappings
@@ -15,5 +15,7 @@ There are two ways to use appender in .NET:
    - **Better Maintainability**: Mapping logic separated from data insertion code
 
 2. **[Standard Appender](standard-appender.md)** - A lower-level API using [CreateAppender](xref:DuckDB.NET.Data.DuckDBConnection.CreateAppender(System.String)) that requires manual row creation with `CreateRow` and `AppendValue` methods. It offers maximum performance, but you must match the table's column order and types yourself - mistakes surface only at runtime.
+
+3. **[Arrow Appender](arrow-appender.md)** - Appends Apache Arrow record batches and streams with [CreateArrowAppender](xref:DuckDB.NET.Data.DuckDBConnection.CreateArrowAppender(System.String)). Use it when your data is already in Arrow format. DuckDB casts each column to the column type of the table.
 
 For most use cases, the [Mapped Appender](mapped-appender.md) is recommended as it eliminates common errors while maintaining excellent performance. Make sure to `Dispose` the appender to avoid data loss.

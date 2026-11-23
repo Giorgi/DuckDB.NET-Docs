@@ -9,13 +9,23 @@ The standard appender is a lower-level API that uses [CreateAppender](xref:DuckD
 Use this approach for maximum performance, or when you need fine-grained control over the insertion process. The appended values must still match the table's column order and types exactly - unlike with the [Mapped Appender](mapped-appender.md), mismatches are not caught up front and surface only at runtime.
 
 > [!CAUTION]
-> When using the standard appender, data types **MUST** match the length of the database types **exactly**. For example when inserting into a UBIGINTEGER column, a ulong such as `0UL` must be used. Writing just `0` will cause data corruption by writing adjacent memory to the database.
+> The standard appender writes a number as the bytes of its .NET type, without checking it against the column, so every number must have the exact type of its column. For example, a UBIGINT column needs a `ulong` such as `0UL`. A number of any other type stores wrong values.
+>
+> This includes integer constants. In C# 12, the default for net8.0 projects, `row.AppendValue(1)` fails with error CS0121 because the constant matches several overloads. Later C# versions compile it, but pass the constant as an `sbyte`, which stores a wrong value in an INTEGER column. Write `(int?)1` instead, or pass a variable of the column's type.
 
 ## Example
 [!code-csharp[](../code/ManagedAppender.cs#Example)]
 
 > [!TIP]
 > `CreateRow` allocates a new row object on every call. Prefer [AppendRow](#appending-rows-with-a-callback) - it reuses a single row instance and avoids that per-row allocation, so it is the recommended approach for bulk loading. Reach for `CreateRow` only when you need an independent row instance whose lifetime you control.
+
+## Values Other Than Numbers
+
+Values that are not numbers are checked against the column. A value the column can't hold throws `InvalidOperationException`, for example a `DateTime` appended to a VARCHAR column, and the row stays open for a correct value (see [With CreateRow](#with-createrow)). A string is stored in full, including any NUL characters.
+
+A HUGEINT column takes an `Int128` and a UHUGEINT column a `UInt128`. Both also take a `BigInteger` within the column's range. A `BigInteger` outside that range throws `ArgumentOutOfRangeException`, and one appended to any other column throws `InvalidOperationException`.
+
+A DATE column takes a `DateOnly`, `DuckDBDateOnly` or `DateTime`. A TIME column takes a `TimeOnly`, `DuckDBTimeOnly` or `DateTime`, and stores the time of day of a `DateTime`. A `TimeOnly` appended to a DATE, TIMETZ or timestamp column, or a `DateOnly` appended to a TIME column, throws `InvalidOperationException`.
 
 ## Appending Rows with a Callback
 
@@ -29,7 +39,7 @@ The row passed to the callback is valid only for the duration of that callback -
 > For large or hot-path loads, prefer the overload that takes a `state` argument together with a `static` callback, as shown above. A callback that captures variables allocates a closure on every row; passing the captured data through `state` keeps the append allocation-free. For occasional use where allocation is not a concern, the single-argument overload is more concise:
 >
 > ```csharp
-> appender.AppendRow(row => row.AppendValue(1).AppendValue(3));
+> appender.AppendRow(row => row.AppendValue((int?)1).AppendValue((int?)3));
 > ```
 
 ## Behavior When a Row Fails
