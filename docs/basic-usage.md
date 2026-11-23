@@ -26,6 +26,14 @@ When building SQL commands, always use parameterized query instead of string con
 
 [!code-csharp[](../code/BasicUsageParameterizedStatement.cs#Example)]
 
+### Parameter values
+
+A parameter is sent as the type of its value. When DuckDB knows the type of the parameter, for example from the column it is compared with, an integer value is converted to that integer type if it fits, and a `decimal` gets the width and scale of a DECIMAL parameter if it fits them. Any other value is sent as its own type, and DuckDB casts it as it would cast a SQL literal. So for an INTEGER parameter a `decimal` 2.5 becomes 3 and a `double` 2.5 becomes 2, because DuckDB rounds a DECIMAL half away from zero and a DOUBLE half to even. A value too large for its parameter is refused by DuckDB.
+
+An `Int128` or `UInt128` is sent as a HUGEINT or UHUGEINT. An enum is sent as its number for an integer parameter and as its name otherwise. A value with no DuckDB type of its own is sent as text, formatted with the invariant culture, so the culture of the machine never changes what DuckDB gets.
+
+If you set the `DbType` of a parameter, the value is converted to the .NET type of that `DbType` when the command runs. It is refused with an `InvalidCastException` if the conversion would lose anything. So `DbType.Int64` takes an `int`, and `DbType.Date` takes a `DateTime` and keeps its date. `DbType.Int32` with 2.5, `DbType.Int32` with `"42"` and `DbType.String` with 42 are refused, because a `DbType` never parses text or turns a number into text. Call `ResetDbType()` to remove a `DbType` you set.
+
 ## Prepared commands
 
 If you execute the same command many times, call [`Prepare`](xref:DuckDB.NET.Data.DuckDBCommand.Prepare) before the first execution. It prepares the statement and keeps it on the connection until the connection closes, and every command on that connection with the same text uses it. Later executions skip parsing and preparing the statement, so set new parameter values and execute the command again, like this:
