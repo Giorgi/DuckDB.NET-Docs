@@ -26,6 +26,8 @@
       href: scalar-functions.md
     - name: Table Functions
       href: table-functions.md
+- name: Upgrading to 2.0
+  href: upgrade-to-2.0.md
 - name: Release Notes
   href: release-notes.md
   items:
