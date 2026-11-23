@@ -60,9 +60,11 @@ SELECT describe_val(42);        -- '42'
 SELECT describe_val(NULL::INT); -- 'nothing'
 ```
 
-This works for reference types too - `string?` opts into null handling, while `string` keeps default NULL propagation. `[AllowNull] string` opts in as well. In a project without nullable annotations a plain `string` is not nullable either, so `string?` (the compiler warns, CS8632, but the annotation is kept) or `[AllowNull] string` is how such a function receives `null`:
+This works for reference types too - `string?` opts into null handling, while `string` keeps default NULL propagation. `[AllowNull] string` and `[MaybeNull] string` opt in as well. In a project without nullable annotations a plain `string` is not nullable either, so `string?` (the compiler warns, CS8632, but the annotation is kept) or `[AllowNull] string` is how such a function receives `null`:
 
 [!code-csharp[](../code/ScalarFunctionNullableReference.cs#Example)]
+
+DuckDB.NET reads these annotations when the function is registered. A function registered in a generic method, with `string?` as the type argument, has no annotation to read and is treated as not nullable.
 
 You can mix nullable and non-nullable parameters. If any parameter is nullable, the function receives NULLs - but non-nullable parameters will throw a clear error if they get one:
 

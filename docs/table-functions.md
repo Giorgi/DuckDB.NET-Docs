@@ -27,6 +27,9 @@ The API supports zero to four parameters:
 
 [!code-csharp[](../code/TableFunctionParameterCounts.cs#Example)]
 
+> [!TIP]
+> When the data function returns an array or a collection such as `List<T>`, DuckDB.NET tells DuckDB how many rows there are, which helps it plan the query. See [Row Count Hint](#row-count-hint).
+
 ### Named Parameters
 
 DuckDB supports named parameters for table functions. Use the [`[Named]`](xref:DuckDB.NET.Data.NamedAttribute) attribute to mark parameters as named:
@@ -109,6 +112,10 @@ The low-level API gives you full control over column definitions and the mapper 
 
 The first callback, `resultCallback`, provides access to the parameters that the function was invoked with and returns a [`TableFunction`](xref:DuckDB.NET.Data.TableFunction) instance that describes the columns and an `IEnumerable<>` that serves as a result set. The second callback, `mapperCallback`, will be invoked by DuckDB.NET for every item in the result set. In this callback you should use the provided [`IDuckDBDataWriter`](xref:DuckDB.NET.Data.DataChunk.Writer.IDuckDBDataWriter) array to write the item back to DuckDB.
 
+Read each parameter with `GetValue<T>` as the .NET type of its DuckDB type, for example `int` for an INTEGER or `string` for a VARCHAR. A DATE can also be read as `DuckDBDateOnly`, a HUGEINT as `Int128` and a timestamp as `DateTimeOffset`. `object` and the nullable form of the type work too, and any other type throws `InvalidCastException`.
+
+The mapper writes values the way the [Standard Appender](standard-appender.md) does. A number must have the exact type of its column, such as `int` for an INTEGER column, or it stores a wrong value. Other values are checked against the column, and a value the column can't hold throws `InvalidOperationException`.
+
 After registering the table function you can use it just like any other table:
 
 ```csharp
@@ -117,3 +124,15 @@ var data = connection.Query<(string, string, int, string, string)>("SELECT * FRO
 
 > [!NOTE]
 > `connection.Query` comes from [Dapper](https://github.com/DapperLib/Dapper), used here for brevity. Dapper is not required to register or use table functions.
+
+### Row Count Hint
+
+DuckDB plans a query better when it knows how many rows a table function returns. DuckDB.NET tells it the count by itself when the data is an array or a collection, in the high-level and the low-level API alike. The length of an array is passed as exact, and the count of a `List<T>` or another collection as an estimate. An iterator, such as a method with `yield return`, has no count until it is read, so nothing is passed for it. With [projection pushdown](#projection-pushdown) the data is created after the query is planned, so nothing is passed either.
+
+To pass a number yourself, for example for an iterator whose length you know, give a [`CardinalityHint`](xref:DuckDB.NET.Data.CardinalityHint) as the third argument of the `TableFunction` constructor, like this:
+
+```csharp
+return new TableFunction(columns, items, new CardinalityHint(1000));
+```
+
+By default the number is an estimate, which DuckDB uses only for planning. Pass `IsExact: true` only when the function returns exactly that many rows. DuckDB then also takes the number as the most rows the function can return. It can drop a `LIMIT` larger than that, or add integers without checking for overflow, so a function that returns more rows than it said can give wrong results.
