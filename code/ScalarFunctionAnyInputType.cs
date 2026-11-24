@@ -12,6 +12,12 @@ public static class ScalarFunctionAnyInputType
         {
             for (ulong index = 0; index < rowCount; index++)
             {
+                if (!readers[0].IsValid(index) || !readers[1].IsValid(index))
+                {
+                    writer.WriteNull(index);
+                    continue;
+                }
+
                 var format = readers[1].GetValue<string>(index);
 
                 var value = readers[0].GetValue(index);
@@ -19,6 +25,10 @@ public static class ScalarFunctionAnyInputType
                 if (value is IFormattable formattable)
                 {
                     writer.WriteValue(formattable.ToString(format, CultureInfo.InvariantCulture), index);
+                }
+                else
+                {
+                    writer.WriteNull(index);
                 }
             }
         });

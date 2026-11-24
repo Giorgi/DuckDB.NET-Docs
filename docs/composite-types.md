@@ -25,7 +25,7 @@ When using the `GetFieldValue<T>` method, you can use the following mapping to r
 
 | DuckDB Type      | .NET Type| Comment |
 |-----------------|----------------------|---|
-| Enum        | `T` | `T` can be a C# enum type, an integer type or `string`. A C# enum or an integer type gets the position of the value in the list of names of the DuckDB Enum, counted from zero, so the names of the C# enum members don't have to match the names in the database. `string` gets the name.|
+| Enum        | `T` | `T` can be a C# enum type, an integer type or `string`. A C# enum or an integer type gets the position of the value in the list of names of the DuckDB Enum, counted from zero. So the names of the C# enum members don't have to match the names in the database. `string` gets the name.|
 | Array | `List<T>` | The underlying type of the Array should be readable as `T`. A class derived from `List<T>` or another collection that implements `IList`, such as `Collection<T>`, can be used too.|
 | List        | `List<T>` | The underlying type of the List should be readable as `T`. A class derived from `List<T>` or another collection that implements `IList`, such as `Collection<T>`, can be used too.|
 | Struct | `T` | `T` can be a class with a parameterless constructor, a C# struct or `Dictionary<string, object>`. Struct keys are matched to properties by name, ignoring case. Struct keys that have no corresponding property on type `T` will be ignored, and properties with no corresponding key keep their value. |
@@ -33,7 +33,7 @@ When using the `GetFieldValue<T>` method, you can use the following mapping to r
 
 A class derived from `List<T>` or `Dictionary<TKey, TValue>` is created as that class and filled with the item, key and value types of its base class, so the derived class doesn't have to be generic itself.
 
-List and Array items, Map keys and values, and Struct fields are converted the same way as a column of their type, as described in [Type mappings](type-mapping.md). For example, an `INTEGER[]` column can be read as `List<long>`, a `BLOB[]` column as `List<byte[]>`, and a `HUGEINT` Struct field into a `long` property if the value fits. A value that can't be converted throws `InvalidCastException`.
+List and Array items, Map keys and values, and Struct fields are converted the same way as a column of their type, as described in [Type mappings](type-mapping.md). For example, an `INTEGER[]` column can be read as `List<long>` and a `BLOB[]` column as `List<byte[]>`. A `HUGEINT` Struct field can be read into a `long` property if the value fits. A value that can't be converted throws `InvalidCastException`.
 
 The target type must be able to hold the value, or `GetFieldValue<T>` throws `InvalidCastException`. A List or Array can't be read into an interface or an abstract class such as `IEnumerable<int>` or `IList<int>`, or into a type that doesn't implement `IList`, such as `HashSet<int>`. A Map can't be read into an interface or an abstract class such as `IDictionary<string, int>`, or into a type that doesn't implement `IDictionary`, such as `string` or `List<KeyValuePair<string, int>>`. A list of `object` and a dictionary with `object` keys or values are refused too, and so is a class derived from `Dictionary<string, object>` when reading a Map. Use `GetValue` to read such a column with its default types.
 

@@ -12,6 +12,12 @@ public static class ScalarFunctionLowLevelIsPrime
         {
             for (ulong index = 0; index < rowCount; index++)
             {
+                if (!readers[0].IsValid(index))
+                {
+                    writer.WriteNull(index);
+                    continue;
+                }
+
                 var prime = true;
                 var value = readers[0].GetValue<int>(index);
 

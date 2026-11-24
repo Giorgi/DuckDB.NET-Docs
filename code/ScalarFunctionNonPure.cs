@@ -12,6 +12,12 @@ public static class ScalarFunctionNonPure
         {
             for (ulong index = 0; index < rowCount; index++)
             {
+                if (!readers[0].IsValid(index))
+                {
+                    writer.WriteNull(index);
+                    continue;
+                }
+
                 var value = Random.Shared.NextInt64(readers[0].GetValue<long>(index));
 
                 writer.WriteValue(value, index);

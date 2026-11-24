@@ -11,6 +11,19 @@ public static class ScalarFunctionVarargs
         {
             for (ulong index = 0; index < rowCount; index++)
             {
+                var hasNull = false;
+
+                for (var i = 0; i < readers.Count; i++)
+                {
+                    hasNull |= !readers[i].IsValid(index);
+                }
+
+                if (hasNull)
+                {
+                    writer.WriteNull(index);
+                    continue;
+                }
+
                 var value = 0L;
 
                 if (readers.Count == 0)

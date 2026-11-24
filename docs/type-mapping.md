@@ -6,7 +6,7 @@ description: "Mappings between DuckDB column types and .NET types when reading d
 
 The following table lists the mappings between DuckDB types and .NET types. The default type is returned by the [`GetValue`](xref:DuckDB.NET.Data.DuckDBDataReader.GetValue(System.Int32)) method. Non-default types can be read by calling the [`GetFieldValue<T>`](xref:DuckDB.NET.Data.DuckDBDataReader.GetFieldValue``1(System.Int32)) method. Calling `GetFieldValue<object>` returns the same value as `GetValue`.
 
-The same mappings apply to list items, map keys and values, struct fields and the arguments of scalar and table functions. A value read into an `object` property of a class or struct has the default type of its column too.
+The same mappings apply to list items, map keys and values, struct fields and the arguments of scalar functions. Table function parameters convert less, as [Table Functions](table-functions.md) describes. A value read into an `object` property of a class or struct has the default type of its column too.
 
 In the table, the integer types are `sbyte`, `byte`, `short`, `ushort`, `int`, `uint`, `long`, `ulong`, `Int128` and `UInt128`.
 

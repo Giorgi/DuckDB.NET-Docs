@@ -36,7 +36,7 @@ public static class ArrowAppender
         using (var appender = connection.CreateArrowAppender("weather"))
         {
             appender.AppendBatch(batch);
-        } // Dispose -> Close writes the two rows
+        } // Dispose closes the appender and writes the two rows
         #endregion
     }
 }
