@@ -25,7 +25,7 @@ Values that are not numbers are checked against the column. A value the column c
 
 A HUGEINT column takes an `Int128` and a UHUGEINT column a `UInt128`. Both also take a `BigInteger` within the column's range. A `BigInteger` outside that range throws `ArgumentOutOfRangeException`, and one appended to any other column throws `InvalidOperationException`.
 
-A DATE column takes a `DateOnly`, `DuckDBDateOnly` or `DateTime`. A TIME column takes a `TimeOnly`, `DuckDBTimeOnly` or `DateTime`, and stores the time of day of a `DateTime`. A `TimeOnly` appended to a DATE, TIMETZ or timestamp column, or a `DateOnly` appended to a TIME column, throws `InvalidOperationException`.
+A DATE column takes a `DateOnly`, `DuckDBDateOnly` or `DateTime`. A TIME column takes a `TimeOnly`, `DuckDBTimeOnly` or `DateTime`, and stores the time of day of a `DateTime`. A TIMETZ column takes a `DateTimeOffset`. A timestamp column takes a `DateTime`, and a TIMESTAMPTZ column also takes a `DateTimeOffset`. Any other date or time type throws `InvalidOperationException`: a `TimeOnly` in a DATE, TIMETZ or timestamp column, a `DateOnly` in a TIME, TIMETZ or timestamp column, and a `DateTime` in a TIMETZ column.
 
 ## Appending Rows with a Callback
 
