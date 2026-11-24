@@ -31,17 +31,17 @@ A `DataTable` with an `Int128` or `UInt128` column can be saved with `WriteXml`,
 
 ## Fractions are no longer rounded to integers
 
-When you read a FLOAT or DOUBLE value as an integer type, 1.x rounded it (half to even, so 2.5 became 2). 2.0 throws `InvalidCastException` when the value has a fractional part, and the same applies to DECIMAL. A whole value that fits still reads, and a whole DECIMAL can now be read as an integer type too, which 1.x refused.
+When you read a REAL or DOUBLE value as an integer type, 1.x rounded it (half to even, so 2.5 became 2). 2.0 throws `InvalidCastException` when the value has a fractional part, and the same applies to DECIMAL. A whole value that fits still reads, and a whole DECIMAL can now be read as an integer type too, which 1.x refused.
 
 If your code relied on the rounding, round in SQL with `round(price)::INTEGER`, or read the value as `double` or `decimal` and round it in C#.
 
 ## Wide decimals keep their scale
 
-A DECIMAL with more than 18 digits that fits in a `decimal` now keeps the scale of its column. 1.5 stored in a DECIMAL(38,4) column reads as `1.5000`, as it already did from a DECIMAL(18,4) column. Equality and arithmetic give the same results as before, but `ToString()` and serialized output now show the trailing zeros. Check tests that compare text and any place that shows such values to users.
+A DECIMAL with more than 18 digits now keeps the scale of its column when a `decimal` can hold the value with that scale. 1.5 stored in a DECIMAL(38,4) column reads as `1.5000`, as it already did from a DECIMAL(18,4) column. Equality and arithmetic give the same results as before, but `ToString()` and serialized output now show the trailing zeros. Check tests that compare text and any place that shows such values to users.
 
 ## Lists, maps and structs
 
-A list item, a map key or value and a struct field are now converted by the same rules as a column, and some reads that failed in 1.x now work. You can read an integer list as `List<BigInteger>`, a HUGEINT list as `List<long>` when the values fit, or an ENUM field as an integer type. A read that cannot work throws `InvalidCastException`. Most of these reads threw `InvalidCastException` in 1.x too, but some threw `ArgumentException`, so check any `catch` blocks that expect it.
+A list item, a map key or value and a struct field are now converted by the same rules as a column, and some reads that failed in 1.x now work. You can read an integer list as `List<BigInteger>`, a HUGEINT list as `List<long>` when the values fit, or an ENUM field as an integer type. A read that cannot work throws as it would in a column, in most cases with `InvalidCastException`. Most of these reads threw `InvalidCastException` in 1.x too, but some threw `ArgumentException`, so check any `catch` blocks that expect it.
 
 The type you read a LIST or MAP into must be one the reader can create and fill. An interface or abstract class such as `IEnumerable<int>`, `IList<int>` or `IReadOnlyDictionary<string, int>`, a `HashSet<int>`, or a `List<KeyValuePair<string, int>>` for a map is refused with `InvalidCastException`. In 1.x these failed with `MissingMethodException`, `ArgumentException` or `InvalidOperationException`. Read into `List<T>` or `Dictionary<TKey, TValue>`, or into a class derived from them, which now works.
 
@@ -69,7 +69,7 @@ An assembly that was compiled against 1.x and uses one of these conversions fail
 
 ## Parameters
 
-DuckDB.NET 1.x converted a parameter value with `Convert.ChangeType`, and sent the value's `ToString()` in the current culture when that failed. A `DbType` set before `Value` was lost when `Value` was assigned. The sections below describe how 2.0 converts parameter values.
+DuckDB.NET 1.x sent some parameter values as their `ToString()` in the current culture. A `DbType` set before `Value` was lost when `Value` was assigned. The sections below describe how 2.0 converts parameter values.
 
 ### A DbType you set decides the value
 
@@ -125,7 +125,7 @@ The new overloads make an integer constant ambiguous in C# 12, the default langu
 appender.AppendRow(row => row.AppendValue((int?)1).AppendValue((long?)2));
 ```
 
-A `BigInteger` appended to a column other than HUGEINT or UHUGEINT now throws `InvalidOperationException`, as an `Int128` does. In 1.x it overwrote the values next to it.
+A `BigInteger` appended to a column other than HUGEINT or UHUGEINT now throws `InvalidOperationException`, as an `Int128` does. In 1.x it overwrote the values next to it in an integer, REAL or DOUBLE column, and stored a broken value in a VARINT column.
 
 A `DateTime` appended to a TIME column now stores its time of day. In 1.x it stored a wrong value. A `TimeOnly` or `DuckDBTimeOnly` written to a DATE, TIMETZ or timestamp column now throws `InvalidOperationException`, and so does a `DateOnly` or `DuckDBDateOnly` written to a TIME, TIMETZ or timestamp column. A `DateTime` written to a TIMETZ column throws too. In 1.x all of these stored wrong values. This applies to the appender and to the results of scalar and table functions.
 

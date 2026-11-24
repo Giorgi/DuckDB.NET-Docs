@@ -44,9 +44,9 @@ In the table, the integer types are `sbyte`, `byte`, `short`, `ushort`, `int`, `
 
 ## Numbers
 
-A number read as another numeric type must fit that type, or the read throws `InvalidCastException`. A `REAL`, `DOUBLE` or `DECIMAL` read as an integer type must also be a whole number, so 42.0 read as `int` is 42 and 1.5 throws. A `DOUBLE` read as `float` is narrowed like a C# cast, and a `REAL` or `DOUBLE` read as `decimal` throws for NaN, infinity and values outside the range of `decimal`.
+A number read as another numeric type must fit that type, or the read throws `InvalidCastException`, except in the cases below. A `REAL`, `DOUBLE` or `DECIMAL` read as an integer type must also be a whole number, so 42.0 read as `int` is 42 and 1.5 throws. A `DOUBLE` read as `float` is narrowed like a C# cast, and a `REAL` or `DOUBLE` read as `decimal` throws for NaN, infinity and values outside the range of `decimal`.
 
-A `DECIMAL` read as `decimal` keeps the scale of its column, so 1.5 from a `DECIMAL(38,4)` column reads as 1.5000. A value with more digits than `decimal` holds (28-29) throws `OverflowException`. You can read it as `BigInteger` if it is a whole number, or as `DuckDBDecimal`, which holds the unscaled value with the column's width and scale.
+A `DECIMAL` read as `decimal` keeps the scale of its column when a `decimal` can hold the value with that scale, so 1.5 from a `DECIMAL(38,4)` column reads as 1.5000. Otherwise fraction digits can be lost, and a value whose whole part is too large for `decimal` throws `OverflowException`. You can read it as `BigInteger` if it is a whole number, or as `DuckDBDecimal`, which holds the unscaled value with the column's width and scale.
 
 The result of `sum()` over an integer column is a `HUGEINT`, so cast the result of `ExecuteScalar` to `Int128`. `ReadXml` refuses a `DataTable` with an `Int128` or `UInt128` column unless the types are added to the [allowed types of DataSet deserialization](https://go.microsoft.com/fwlink/?linkid=2132227).
 
