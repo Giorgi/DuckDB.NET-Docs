@@ -18,6 +18,7 @@ Each release lists the DuckDB.NET.Data changes first. Changes that affect only t
 
 | Series | Latest version | Released | DuckDB versions |
 |---|---|---|---|
+| [2.0](release-notes/2.0.md) | [2.0.1-preview.1](release-notes/2.0.md#201-preview1) | 2026-11-20 | v2.0.0 – v2.0.1 |
 | [1.5](release-notes/1.5.md) | [1.5.6.1](release-notes/1.5.md#1561) | 2026-10-15 | v1.5.0 – v1.5.6 |
 | [1.4](release-notes/1.4.md) | [1.4.4](release-notes/1.4.md#144) | 2026-02-03 | v1.4.1 – v1.4.4 |
 | [1.3](release-notes/1.3.md) | [1.3.2](release-notes/1.3.md#132) | 2025-07-08 | v1.3.0 – v1.3.2 |

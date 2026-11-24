@@ -33,6 +33,8 @@
 - name: Release Notes
   href: release-notes.md
   items:
+    - name: DuckDB.NET 2.0
+      href: release-notes/2.0.md
     - name: DuckDB.NET 1.5
       href: release-notes/1.5.md
     - name: DuckDB.NET 1.4
